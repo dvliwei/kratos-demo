@@ -9,6 +9,7 @@
 - 将 token 写入 `users.remember_token` 字段。
 - 根据用户 ID 查询用户基础信息。
 - 分页查询用户列表，支持按姓名、邮箱搜索。
+- 查询用户总数，供网关统计接口聚合使用。
 
 ## 默认端口
 
@@ -30,6 +31,19 @@
 | `Login` | 用户邮箱密码登录 |
 | `GetUser` | 根据 ID 查询用户 |
 | `ListUsersWithPage` | 分页查询用户列表 |
+| `GetUserTotal` | 查询用户总数 |
+
+### GetUserTotal
+
+`GetUserTotal` 没有请求参数，返回：
+
+```json
+{
+  "total": 100
+}
+```
+
+该接口主要供 `gateway-service` 的 `/v1/user_game_app_stats` 聚合接口通过 gRPC 调用。
 
 ## 登录说明
 
@@ -122,5 +136,6 @@ user-service/
 - 修改 `api/user/v1/user.proto` 后，需要执行 `make api`。
 - 修改 `internal/conf/conf.proto` 后，需要执行 `make config`。
 - 如果本机 `protoc` 报动态库缺失，需要先修复 Protobuf 安装环境。
+- `make api` 中已支持 proto3 optional 兼容参数，便于与其他服务的 proto 生成方式保持一致。
 - `remember_token` 字段建议在数据库中使用足够长度，例如 `varchar(512)` 或 `text`。
 - 当前服务主要作为内部 gRPC 服务被网关调用。

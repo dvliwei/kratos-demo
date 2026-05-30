@@ -1,6 +1,6 @@
 # Kratos Demo 微服务项目
 
-这是一个基于 Go Kratos 的多服务示例项目，当前包含网关服务、用户服务和游戏应用服务。项目通过 `go.work` 管理多个 Go module，适合用来练习 Kratos 的 HTTP/gRPC、服务分层、网关转发、统一响应、JWT 登录和数据库访问。
+这是一个基于 Go Kratos 的多服务示例项目，当前包含网关服务、用户服务和游戏应用服务。项目通过 `go.work` 管理多个 Go module，适合用来练习 Kratos 的 HTTP/gRPC、服务分层、网关聚合、统一响应、JWT 登录、分页筛选和数据库访问。
 
 ## 项目结构
 
@@ -19,8 +19,8 @@ kratos-demo/
 | 服务 | 默认 HTTP | 默认 gRPC | 说明 |
 | --- | --- | --- | --- |
 | gateway-service | `:8080` | `:9000` | 对外统一入口，负责 HTTP 路由、统一响应包装、request_id 生成与透传 |
-| user-service | `:8000` | `:9100` | 用户登录、用户详情、用户分页查询 |
-| gameapp-service | `:8088` | `:9200` | 游戏应用详情查询 |
+| user-service | `:8000` | `:9100` | 用户登录、用户详情、用户分页查询、用户总数统计 |
+| gameapp-service | `:8088` | `:9200` | 游戏应用详情、分页查询、应用总数统计 |
 
 ## 调用关系
 
@@ -74,6 +74,8 @@ gateway-service
 | `GET` | `/v1/users/{id}` | 查询用户详情 |
 | `POST` | `/v1/users` | 分页查询用户列表 |
 | `GET` | `/v1/game_app/{id}` | 查询游戏应用详情 |
+| `POST` | `/v1/game_apps` | 分页查询游戏应用列表，支持按名称和 `type_os` 筛选 |
+| `GET` | `/v1/user_game_app_stats` | 聚合查询用户总数和游戏应用总数 |
 
 示例：
 
@@ -82,6 +84,22 @@ curl -X POST http://127.0.0.1:8080/v1/users \
   -H 'Content-Type: application/json' \
   -H 'X-Request-Id: demo-request-id' \
   -d '{"page":1,"page_size":10,"search":{"name":"test"}}'
+```
+
+分页查询游戏应用：
+
+```bash
+curl -X POST http://127.0.0.1:8080/v1/game_apps \
+  -H 'Content-Type: application/json' \
+  -d '{"page":1,"page_size":10,"search":{"name":"demo","type_os":0}}'
+```
+
+`type_os` 使用 proto3 `optional` 字段。请求中不传 `type_os` 表示不按平台筛选；传 `0` 表示明确查询 `type_os = 0`。
+
+聚合统计：
+
+```bash
+curl http://127.0.0.1:8080/v1/user_game_app_stats
 ```
 
 ## 本地启动
@@ -148,6 +166,12 @@ go test ./...
 make api
 ```
 
+当前 `gameapp-service` 和 `gateway-service` 的 proto 使用了 proto3 `optional` 字段，`Makefile` 中需要包含：
+
+```bash
+--experimental_allow_proto3_optional
+```
+
 生成配置代码：
 
 ```bash
@@ -166,5 +190,5 @@ go generate ./...
 - `gateway-service` 是外部 HTTP 的统一入口，业务微服务不建议直接暴露给前端。
 - 修改 `.proto` 后需要重新执行对应服务的 `make api` 或 `make config`。
 - 如果 `make config` 报 `protoc` 动态库缺失，需要先修复本机 Protobuf 安装环境。
-- `gameapp-service` 当前游戏应用数据是内存示例数据，不是数据库查询。
+- `gameapp-service` 当前通过 GORM 查询 `tab_game_app` 表。
 - `gateway-service` 的下游 gRPC 地址当前在代码中仍有硬编码调用点，后续可统一改为读取 `configs/config.yaml` 的 client 配置。
