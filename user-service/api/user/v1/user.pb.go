@@ -80,6 +80,7 @@ func (x *LoginRequest) GetPassword() string {
 	return ""
 }
 
+// 返回结果
 type LoginReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -411,6 +412,88 @@ func (x *ListUsersReply) GetUsers() []*SearchUser {
 	return nil
 }
 
+// 查询用户总数返回结果
+type GetUserTotalReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Total         uint64                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"` // 总记录数
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserTotalReply) Reset() {
+	*x = GetUserTotalReply{}
+	mi := &file_user_v1_user_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserTotalReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserTotalReply) ProtoMessage() {}
+
+func (x *GetUserTotalReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserTotalReply.ProtoReflect.Descriptor instead.
+func (*GetUserTotalReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetUserTotalReply) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+// 查询用户总数请求参数
+type GetUserTotalRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserTotalRequest) Reset() {
+	*x = GetUserTotalRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserTotalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserTotalRequest) ProtoMessage() {}
+
+func (x *GetUserTotalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserTotalRequest.ProtoReflect.Descriptor instead.
+func (*GetUserTotalRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{8}
+}
+
 var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
@@ -440,11 +523,15 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x06search\x18\x03 \x01(\v2\x13.user.v1.SearchUserR\x06search\"Q\n" +
 	"\x0eListUsersReply\x12\x14\n" +
 	"\x05total\x18\x01 \x01(\rR\x05total\x12)\n" +
-	"\x05users\x18\x02 \x03(\v2\x13.user.v1.SearchUserR\x05users2\xbf\x01\n" +
+	"\x05users\x18\x02 \x03(\v2\x13.user.v1.SearchUserR\x05users\")\n" +
+	"\x11GetUserTotalReply\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total\"\x15\n" +
+	"\x13GetUserTotalRequest2\x89\x02\n" +
 	"\x04User\x123\n" +
 	"\x05Login\x12\x15.user.v1.LoginRequest\x1a\x13.user.v1.LoginReply\x129\n" +
 	"\aGetUser\x12\x17.user.v1.GetUserRequest\x1a\x15.user.v1.GetUserReply\x12G\n" +
-	"\x11ListUsersWithPage\x12\x19.user.v1.ListUsersRequest\x1a\x17.user.v1.ListUsersReplyB\x1dZ\x1buser-service/api/user/v1;v1b\x06proto3"
+	"\x11ListUsersWithPage\x12\x19.user.v1.ListUsersRequest\x1a\x17.user.v1.ListUsersReply\x12H\n" +
+	"\fGetUserTotal\x12\x1c.user.v1.GetUserTotalRequest\x1a\x1a.user.v1.GetUserTotalReplyB\x1dZ\x1buser-service/api/user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once
@@ -458,15 +545,17 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_user_v1_user_proto_goTypes = []any{
-	(*LoginRequest)(nil),     // 0: user.v1.LoginRequest
-	(*LoginReply)(nil),       // 1: user.v1.LoginReply
-	(*GetUserRequest)(nil),   // 2: user.v1.GetUserRequest
-	(*GetUserReply)(nil),     // 3: user.v1.GetUserReply
-	(*SearchUser)(nil),       // 4: user.v1.SearchUser
-	(*ListUsersRequest)(nil), // 5: user.v1.ListUsersRequest
-	(*ListUsersReply)(nil),   // 6: user.v1.ListUsersReply
+	(*LoginRequest)(nil),        // 0: user.v1.LoginRequest
+	(*LoginReply)(nil),          // 1: user.v1.LoginReply
+	(*GetUserRequest)(nil),      // 2: user.v1.GetUserRequest
+	(*GetUserReply)(nil),        // 3: user.v1.GetUserReply
+	(*SearchUser)(nil),          // 4: user.v1.SearchUser
+	(*ListUsersRequest)(nil),    // 5: user.v1.ListUsersRequest
+	(*ListUsersReply)(nil),      // 6: user.v1.ListUsersReply
+	(*GetUserTotalReply)(nil),   // 7: user.v1.GetUserTotalReply
+	(*GetUserTotalRequest)(nil), // 8: user.v1.GetUserTotalRequest
 }
 var file_user_v1_user_proto_depIdxs = []int32{
 	4, // 0: user.v1.ListUsersRequest.search:type_name -> user.v1.SearchUser
@@ -474,11 +563,13 @@ var file_user_v1_user_proto_depIdxs = []int32{
 	0, // 2: user.v1.User.Login:input_type -> user.v1.LoginRequest
 	2, // 3: user.v1.User.GetUser:input_type -> user.v1.GetUserRequest
 	5, // 4: user.v1.User.ListUsersWithPage:input_type -> user.v1.ListUsersRequest
-	1, // 5: user.v1.User.Login:output_type -> user.v1.LoginReply
-	3, // 6: user.v1.User.GetUser:output_type -> user.v1.GetUserReply
-	6, // 7: user.v1.User.ListUsersWithPage:output_type -> user.v1.ListUsersReply
-	5, // [5:8] is the sub-list for method output_type
-	2, // [2:5] is the sub-list for method input_type
+	8, // 5: user.v1.User.GetUserTotal:input_type -> user.v1.GetUserTotalRequest
+	1, // 6: user.v1.User.Login:output_type -> user.v1.LoginReply
+	3, // 7: user.v1.User.GetUser:output_type -> user.v1.GetUserReply
+	6, // 8: user.v1.User.ListUsersWithPage:output_type -> user.v1.ListUsersReply
+	7, // 9: user.v1.User.GetUserTotal:output_type -> user.v1.GetUserTotalReply
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -495,7 +586,7 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -48,3 +48,8 @@ func (r *gameAppRepo) FindByID(ctx context.Context, id uint64) (*biz.GameApp, er
 	}
 	return gameapp, nil
 }
+
+func (r *gameAppRepo) CountGameApps(ctx context.Context) (uint64, error) {
+	// 模拟统计游戏应用数量
+	return 2, nil
+}

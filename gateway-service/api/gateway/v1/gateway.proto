@@ -41,6 +41,12 @@ service GatewayService {
       get: "/v1/game_app/{id}"
     };
   }
+  //用户和游戏统计接口
+  rpc GetUserGameAppStats(GetUserGameAppStatsRequest) returns (GetUserGameAppStatsReply) {
+    option (google.api.http) = {
+      get: "/v1/user_game_app_stats"
+    };
+  }
 }
 
 message LoginRequest{
@@ -89,4 +95,12 @@ message GameAppInfo {
 }
 message GetGameAppReply {
   GameAppInfo game_app = 1; // 游戏应用信息
+}
+
+message GetUserGameAppStatsRequest {
+  // 无需参数
+}
+message GetUserGameAppStatsReply{
+  int64 total_users = 1; // 用户总数
+  int64 total_game_apps = 2; // 游戏应用总数
 }

@@ -185,6 +185,86 @@ func (x *GetGameAppResponse) GetInfo() *GameAppInfo {
 	return nil
 }
 
+type CountGameAppsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountGameAppsRequest) Reset() {
+	*x = CountGameAppsRequest{}
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountGameAppsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountGameAppsRequest) ProtoMessage() {}
+
+func (x *CountGameAppsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountGameAppsRequest.ProtoReflect.Descriptor instead.
+func (*CountGameAppsRequest) Descriptor() ([]byte, []int) {
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{3}
+}
+
+type CountGameAppsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Total         uint64                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"` // 总记录数
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountGameAppsResponse) Reset() {
+	*x = CountGameAppsResponse{}
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountGameAppsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountGameAppsResponse) ProtoMessage() {}
+
+func (x *CountGameAppsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountGameAppsResponse.ProtoReflect.Descriptor instead.
+func (*CountGameAppsResponse) Descriptor() ([]byte, []int) {
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CountGameAppsResponse) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 var File_gameapp_v1_gameapp_proto protoreflect.FileDescriptor
 
 const file_gameapp_v1_gameapp_proto_rawDesc = "" +
@@ -200,10 +280,14 @@ const file_gameapp_v1_gameapp_proto_rawDesc = "" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12\x17\n" +
 	"\aapp_key\x18\x05 \x01(\tR\x06appKey\"A\n" +
 	"\x12GetGameAppResponse\x12+\n" +
-	"\x04info\x18\x01 \x01(\v2\x17.gameapp.v1.GameAppInfoR\x04info2]\n" +
+	"\x04info\x18\x01 \x01(\v2\x17.gameapp.v1.GameAppInfoR\x04info\"\x16\n" +
+	"\x14CountGameAppsRequest\"-\n" +
+	"\x15CountGameAppsResponse\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total2\xb3\x01\n" +
 	"\x0eGameAppService\x12K\n" +
 	"\n" +
-	"GetGameApp\x12\x1d.gameapp.v1.GetGameAppRequest\x1a\x1e.gameapp.v1.GetGameAppResponseB\x16Z\x14gameapp/v1;gameappv1b\x06proto3"
+	"GetGameApp\x12\x1d.gameapp.v1.GetGameAppRequest\x1a\x1e.gameapp.v1.GetGameAppResponse\x12T\n" +
+	"\rCountGameApps\x12 .gameapp.v1.CountGameAppsRequest\x1a!.gameapp.v1.CountGameAppsResponseB\x16Z\x14gameapp/v1;gameappv1b\x06proto3"
 
 var (
 	file_gameapp_v1_gameapp_proto_rawDescOnce sync.Once
@@ -217,18 +301,22 @@ func file_gameapp_v1_gameapp_proto_rawDescGZIP() []byte {
 	return file_gameapp_v1_gameapp_proto_rawDescData
 }
 
-var file_gameapp_v1_gameapp_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_gameapp_v1_gameapp_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_gameapp_v1_gameapp_proto_goTypes = []any{
-	(*GetGameAppRequest)(nil),  // 0: gameapp.v1.GetGameAppRequest
-	(*GameAppInfo)(nil),        // 1: gameapp.v1.GameAppInfo
-	(*GetGameAppResponse)(nil), // 2: gameapp.v1.GetGameAppResponse
+	(*GetGameAppRequest)(nil),     // 0: gameapp.v1.GetGameAppRequest
+	(*GameAppInfo)(nil),           // 1: gameapp.v1.GameAppInfo
+	(*GetGameAppResponse)(nil),    // 2: gameapp.v1.GetGameAppResponse
+	(*CountGameAppsRequest)(nil),  // 3: gameapp.v1.CountGameAppsRequest
+	(*CountGameAppsResponse)(nil), // 4: gameapp.v1.CountGameAppsResponse
 }
 var file_gameapp_v1_gameapp_proto_depIdxs = []int32{
 	1, // 0: gameapp.v1.GetGameAppResponse.info:type_name -> gameapp.v1.GameAppInfo
 	0, // 1: gameapp.v1.GameAppService.GetGameApp:input_type -> gameapp.v1.GetGameAppRequest
-	2, // 2: gameapp.v1.GameAppService.GetGameApp:output_type -> gameapp.v1.GetGameAppResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
+	3, // 2: gameapp.v1.GameAppService.CountGameApps:input_type -> gameapp.v1.CountGameAppsRequest
+	2, // 3: gameapp.v1.GameAppService.GetGameApp:output_type -> gameapp.v1.GetGameAppResponse
+	4, // 4: gameapp.v1.GameAppService.CountGameApps:output_type -> gameapp.v1.CountGameAppsResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -245,7 +333,7 @@ func file_gameapp_v1_gameapp_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gameapp_v1_gameapp_proto_rawDesc), len(file_gameapp_v1_gameapp_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

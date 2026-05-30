@@ -28,6 +28,7 @@ const (
 	User_Login_FullMethodName             = "/user.v1.User/Login"
 	User_GetUser_FullMethodName           = "/user.v1.User/GetUser"
 	User_ListUsersWithPage_FullMethodName = "/user.v1.User/ListUsersWithPage"
+	User_GetUserTotal_FullMethodName      = "/user.v1.User/GetUserTotal"
 )
 
 // UserClient is the client API for User service.
@@ -42,6 +43,8 @@ type UserClient interface {
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserReply, error)
 	// 分页查询用户列表
 	ListUsersWithPage(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersReply, error)
+	// 查询用户总数
+	GetUserTotal(ctx context.Context, in *GetUserTotalRequest, opts ...grpc.CallOption) (*GetUserTotalReply, error)
 }
 
 type userClient struct {
@@ -82,6 +85,16 @@ func (c *userClient) ListUsersWithPage(ctx context.Context, in *ListUsersRequest
 	return out, nil
 }
 
+func (c *userClient) GetUserTotal(ctx context.Context, in *GetUserTotalRequest, opts ...grpc.CallOption) (*GetUserTotalReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserTotalReply)
+	err := c.cc.Invoke(ctx, User_GetUserTotal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
@@ -94,6 +107,8 @@ type UserServer interface {
 	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
 	// 分页查询用户列表
 	ListUsersWithPage(context.Context, *ListUsersRequest) (*ListUsersReply, error)
+	// 查询用户总数
+	GetUserTotal(context.Context, *GetUserTotalRequest) (*GetUserTotalReply, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -112,6 +127,9 @@ func (UnimplementedUserServer) GetUser(context.Context, *GetUserRequest) (*GetUs
 }
 func (UnimplementedUserServer) ListUsersWithPage(context.Context, *ListUsersRequest) (*ListUsersReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListUsersWithPage not implemented")
+}
+func (UnimplementedUserServer) GetUserTotal(context.Context, *GetUserTotalRequest) (*GetUserTotalReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserTotal not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 func (UnimplementedUserServer) testEmbeddedByValue()              {}
@@ -188,6 +206,24 @@ func _User_ListUsersWithPage_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_GetUserTotal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserTotalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetUserTotal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_GetUserTotal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetUserTotal(ctx, req.(*GetUserTotalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +242,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUsersWithPage",
 			Handler:    _User_ListUsersWithPage_Handler,
+		},
+		{
+			MethodName: "GetUserTotal",
+			Handler:    _User_GetUserTotal_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

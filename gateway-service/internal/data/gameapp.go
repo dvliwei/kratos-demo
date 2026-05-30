@@ -60,3 +60,11 @@ func (r *gameAppRepo) GetGameApp(ctx context.Context, gameAppID int64) (*biz.Gam
 		GameID: resp.Info.GameId,
 	}, nil
 }
+
+func (r *gameAppRepo) CountGameApps(ctx context.Context) (uint64, error) {
+	resp, err := r.client.CountGameApps(ctx, &gameappv1.CountGameAppsRequest{})
+	if err != nil {
+		return 0, err
+	}
+	return resp.Total, nil
+}

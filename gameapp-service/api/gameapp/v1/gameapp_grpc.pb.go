@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GameAppService_GetGameApp_FullMethodName = "/gameapp.v1.GameAppService/GetGameApp"
+	GameAppService_GetGameApp_FullMethodName    = "/gameapp.v1.GameAppService/GetGameApp"
+	GameAppService_CountGameApps_FullMethodName = "/gameapp.v1.GameAppService/CountGameApps"
 )
 
 // GameAppServiceClient is the client API for GameAppService service.
@@ -27,6 +28,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameAppServiceClient interface {
 	GetGameApp(ctx context.Context, in *GetGameAppRequest, opts ...grpc.CallOption) (*GetGameAppResponse, error)
+	// 统计游戏APP数量
+	CountGameApps(ctx context.Context, in *CountGameAppsRequest, opts ...grpc.CallOption) (*CountGameAppsResponse, error)
 }
 
 type gameAppServiceClient struct {
@@ -47,11 +50,23 @@ func (c *gameAppServiceClient) GetGameApp(ctx context.Context, in *GetGameAppReq
 	return out, nil
 }
 
+func (c *gameAppServiceClient) CountGameApps(ctx context.Context, in *CountGameAppsRequest, opts ...grpc.CallOption) (*CountGameAppsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountGameAppsResponse)
+	err := c.cc.Invoke(ctx, GameAppService_CountGameApps_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GameAppServiceServer is the server API for GameAppService service.
 // All implementations must embed UnimplementedGameAppServiceServer
 // for forward compatibility.
 type GameAppServiceServer interface {
 	GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppResponse, error)
+	// 统计游戏APP数量
+	CountGameApps(context.Context, *CountGameAppsRequest) (*CountGameAppsResponse, error)
 	mustEmbedUnimplementedGameAppServiceServer()
 }
 
@@ -64,6 +79,9 @@ type UnimplementedGameAppServiceServer struct{}
 
 func (UnimplementedGameAppServiceServer) GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetGameApp not implemented")
+}
+func (UnimplementedGameAppServiceServer) CountGameApps(context.Context, *CountGameAppsRequest) (*CountGameAppsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CountGameApps not implemented")
 }
 func (UnimplementedGameAppServiceServer) mustEmbedUnimplementedGameAppServiceServer() {}
 func (UnimplementedGameAppServiceServer) testEmbeddedByValue()                        {}
@@ -104,6 +122,24 @@ func _GameAppService_GetGameApp_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameAppService_CountGameApps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CountGameAppsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameAppServiceServer).CountGameApps(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GameAppService_CountGameApps_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameAppServiceServer).CountGameApps(ctx, req.(*CountGameAppsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GameAppService_ServiceDesc is the grpc.ServiceDesc for GameAppService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +150,10 @@ var GameAppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGameApp",
 			Handler:    _GameAppService_GetGameApp_Handler,
+		},
+		{
+			MethodName: "CountGameApps",
+			Handler:    _GameAppService_CountGameApps_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

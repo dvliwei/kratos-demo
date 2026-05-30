@@ -87,6 +87,19 @@ func (a *GatewayService) GetGameApp(ctx context.Context, req *v1.GetGameAppReque
 	}, nil
 }
 
+func (a *GatewayService) GetUserGameAppStats(ctx context.Context, req *v1.GetUserGameAppStatsRequest) (*v1.GetUserGameAppStatsReply, error) {
+	result := &v1.GetUserGameAppStatsReply{}
+	totalUsers, err := a.uc.GetUserCount(ctx)
+	if err == nil {
+		result.TotalUsers = int64(totalUsers)
+	}
+	totalGameApps, err := a.gameAppUC.CountGameApps(ctx)
+	if err == nil {
+		result.TotalGameApps = int64(totalGameApps)
+	}
+	return result, nil
+}
+
 // Login 用户邮箱密码登录
 func (a *GatewayService) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginReply, error) {
 	name, token, err := a.uc.Login(ctx, req.GetEmail(), req.GetPassword())

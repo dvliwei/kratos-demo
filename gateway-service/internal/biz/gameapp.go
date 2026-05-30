@@ -22,6 +22,7 @@ type GameApp struct {
 
 type GameAppRepo interface {
 	GetGameApp(ctx context.Context, gameAppID int64) (*GameApp, error)
+	CountGameApps(ctx context.Context) (uint64, error)
 }
 type GameAppUseCase struct {
 	repo GameAppRepo
@@ -32,4 +33,8 @@ func NewGameAppUseCase(repo GameAppRepo) *GameAppUseCase {
 }
 func (a *GameAppUseCase) GetGameApp(ctx context.Context, gameAppID int64) (*GameApp, error) {
 	return a.repo.GetGameApp(ctx, gameAppID)
+}
+
+func (a *GameAppUseCase) CountGameApps(ctx context.Context) (uint64, error) {
+	return a.repo.CountGameApps(ctx)
 }

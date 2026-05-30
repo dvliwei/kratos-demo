@@ -103,3 +103,12 @@ func (r *userRepo) Login(ctx context.Context, email string, password string) (*s
 	}
 	return &resp.Name, &resp.Token, nil
 }
+
+func (r *userRepo) GetUserCount(ctx context.Context) (uint64, error) {
+	ctx = withRequestID(ctx)
+	resp, err := r.client.GetUserTotal(ctx, &userv1.GetUserTotalRequest{})
+	if err != nil {
+		return 0, err
+	}
+	return resp.Total, nil
+}

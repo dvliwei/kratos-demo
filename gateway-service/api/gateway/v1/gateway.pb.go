@@ -565,6 +565,94 @@ func (x *GetGameAppReply) GetGameApp() *GameAppInfo {
 	return nil
 }
 
+type GetUserGameAppStatsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserGameAppStatsRequest) Reset() {
+	*x = GetUserGameAppStatsRequest{}
+	mi := &file_gateway_v1_gateway_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserGameAppStatsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserGameAppStatsRequest) ProtoMessage() {}
+
+func (x *GetUserGameAppStatsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_gateway_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserGameAppStatsRequest.ProtoReflect.Descriptor instead.
+func (*GetUserGameAppStatsRequest) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{10}
+}
+
+type GetUserGameAppStatsReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TotalUsers    int64                  `protobuf:"varint,1,opt,name=total_users,json=totalUsers,proto3" json:"total_users,omitempty"`            // 用户总数
+	TotalGameApps int64                  `protobuf:"varint,2,opt,name=total_game_apps,json=totalGameApps,proto3" json:"total_game_apps,omitempty"` // 游戏应用总数
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserGameAppStatsReply) Reset() {
+	*x = GetUserGameAppStatsReply{}
+	mi := &file_gateway_v1_gateway_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserGameAppStatsReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserGameAppStatsReply) ProtoMessage() {}
+
+func (x *GetUserGameAppStatsReply) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_gateway_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserGameAppStatsReply.ProtoReflect.Descriptor instead.
+func (*GetUserGameAppStatsReply) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetUserGameAppStatsReply) GetTotalUsers() int64 {
+	if x != nil {
+		return x.TotalUsers
+	}
+	return 0
+}
+
+func (x *GetUserGameAppStatsReply) GetTotalGameApps() int64 {
+	if x != nil {
+		return x.TotalGameApps
+	}
+	return 0
+}
+
 var File_gateway_v1_gateway_proto protoreflect.FileDescriptor
 
 const file_gateway_v1_gateway_proto_rawDesc = "" +
@@ -604,13 +692,19 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\agame_id\x18\x03 \x01(\tR\x06gameId\x12\x17\n" +
 	"\aapp_key\x18\x04 \x01(\tR\x06appKey\"E\n" +
 	"\x0fGetGameAppReply\x122\n" +
-	"\bgame_app\x18\x01 \x01(\v2\x17.gateway.v1.GameAppInfoR\agameApp2\x8b\x03\n" +
+	"\bgame_app\x18\x01 \x01(\v2\x17.gateway.v1.GameAppInfoR\agameApp\"\x1c\n" +
+	"\x1aGetUserGameAppStatsRequest\"c\n" +
+	"\x18GetUserGameAppStatsReply\x12\x1f\n" +
+	"\vtotal_users\x18\x01 \x01(\x03R\n" +
+	"totalUsers\x12&\n" +
+	"\x0ftotal_game_apps\x18\x02 \x01(\x03R\rtotalGameApps2\x92\x04\n" +
 	"\x0eGatewayService\x12O\n" +
 	"\x05Login\x12\x18.gateway.v1.LoginRequest\x1a\x16.gateway.v1.LoginReply\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/v1/login\x12^\n" +
 	"\x0eGetGatewayInfo\x12\x1a.gateway.v1.GetUserRequest\x1a\x18.gateway.v1.GetUserReply\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/users/{id}\x12c\n" +
 	"\x11ListUsersWithPage\x12\x1c.gateway.v1.ListUsersRequest\x1a\x1a.gateway.v1.ListUsersReply\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/v1/users\x12c\n" +
 	"\n" +
-	"GetGameApp\x12\x1d.gateway.v1.GetGameAppRequest\x1a\x1b.gateway.v1.GetGameAppReply\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/v1/game_app/{id}B#Z!gateway-service/api/gateway/v1;v1b\x06proto3"
+	"GetGameApp\x12\x1d.gateway.v1.GetGameAppRequest\x1a\x1b.gateway.v1.GetGameAppReply\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/v1/game_app/{id}\x12\x84\x01\n" +
+	"\x13GetUserGameAppStats\x12&.gateway.v1.GetUserGameAppStatsRequest\x1a$.gateway.v1.GetUserGameAppStatsReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/v1/user_game_app_statsB#Z!gateway-service/api/gateway/v1;v1b\x06proto3"
 
 var (
 	file_gateway_v1_gateway_proto_rawDescOnce sync.Once
@@ -624,36 +718,40 @@ func file_gateway_v1_gateway_proto_rawDescGZIP() []byte {
 	return file_gateway_v1_gateway_proto_rawDescData
 }
 
-var file_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_gateway_v1_gateway_proto_goTypes = []any{
-	(*LoginRequest)(nil),      // 0: gateway.v1.LoginRequest
-	(*LoginReply)(nil),        // 1: gateway.v1.LoginReply
-	(*SearchUser)(nil),        // 2: gateway.v1.SearchUser
-	(*ListUsersRequest)(nil),  // 3: gateway.v1.ListUsersRequest
-	(*ListUsersReply)(nil),    // 4: gateway.v1.ListUsersReply
-	(*GetUserRequest)(nil),    // 5: gateway.v1.GetUserRequest
-	(*GetUserReply)(nil),      // 6: gateway.v1.GetUserReply
-	(*GetGameAppRequest)(nil), // 7: gateway.v1.GetGameAppRequest
-	(*GameAppInfo)(nil),       // 8: gateway.v1.GameAppInfo
-	(*GetGameAppReply)(nil),   // 9: gateway.v1.GetGameAppReply
+	(*LoginRequest)(nil),               // 0: gateway.v1.LoginRequest
+	(*LoginReply)(nil),                 // 1: gateway.v1.LoginReply
+	(*SearchUser)(nil),                 // 2: gateway.v1.SearchUser
+	(*ListUsersRequest)(nil),           // 3: gateway.v1.ListUsersRequest
+	(*ListUsersReply)(nil),             // 4: gateway.v1.ListUsersReply
+	(*GetUserRequest)(nil),             // 5: gateway.v1.GetUserRequest
+	(*GetUserReply)(nil),               // 6: gateway.v1.GetUserReply
+	(*GetGameAppRequest)(nil),          // 7: gateway.v1.GetGameAppRequest
+	(*GameAppInfo)(nil),                // 8: gateway.v1.GameAppInfo
+	(*GetGameAppReply)(nil),            // 9: gateway.v1.GetGameAppReply
+	(*GetUserGameAppStatsRequest)(nil), // 10: gateway.v1.GetUserGameAppStatsRequest
+	(*GetUserGameAppStatsReply)(nil),   // 11: gateway.v1.GetUserGameAppStatsReply
 }
 var file_gateway_v1_gateway_proto_depIdxs = []int32{
-	2, // 0: gateway.v1.ListUsersRequest.search:type_name -> gateway.v1.SearchUser
-	2, // 1: gateway.v1.ListUsersReply.users:type_name -> gateway.v1.SearchUser
-	8, // 2: gateway.v1.GetGameAppReply.game_app:type_name -> gateway.v1.GameAppInfo
-	0, // 3: gateway.v1.GatewayService.Login:input_type -> gateway.v1.LoginRequest
-	5, // 4: gateway.v1.GatewayService.GetGatewayInfo:input_type -> gateway.v1.GetUserRequest
-	3, // 5: gateway.v1.GatewayService.ListUsersWithPage:input_type -> gateway.v1.ListUsersRequest
-	7, // 6: gateway.v1.GatewayService.GetGameApp:input_type -> gateway.v1.GetGameAppRequest
-	1, // 7: gateway.v1.GatewayService.Login:output_type -> gateway.v1.LoginReply
-	6, // 8: gateway.v1.GatewayService.GetGatewayInfo:output_type -> gateway.v1.GetUserReply
-	4, // 9: gateway.v1.GatewayService.ListUsersWithPage:output_type -> gateway.v1.ListUsersReply
-	9, // 10: gateway.v1.GatewayService.GetGameApp:output_type -> gateway.v1.GetGameAppReply
-	7, // [7:11] is the sub-list for method output_type
-	3, // [3:7] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	2,  // 0: gateway.v1.ListUsersRequest.search:type_name -> gateway.v1.SearchUser
+	2,  // 1: gateway.v1.ListUsersReply.users:type_name -> gateway.v1.SearchUser
+	8,  // 2: gateway.v1.GetGameAppReply.game_app:type_name -> gateway.v1.GameAppInfo
+	0,  // 3: gateway.v1.GatewayService.Login:input_type -> gateway.v1.LoginRequest
+	5,  // 4: gateway.v1.GatewayService.GetGatewayInfo:input_type -> gateway.v1.GetUserRequest
+	3,  // 5: gateway.v1.GatewayService.ListUsersWithPage:input_type -> gateway.v1.ListUsersRequest
+	7,  // 6: gateway.v1.GatewayService.GetGameApp:input_type -> gateway.v1.GetGameAppRequest
+	10, // 7: gateway.v1.GatewayService.GetUserGameAppStats:input_type -> gateway.v1.GetUserGameAppStatsRequest
+	1,  // 8: gateway.v1.GatewayService.Login:output_type -> gateway.v1.LoginReply
+	6,  // 9: gateway.v1.GatewayService.GetGatewayInfo:output_type -> gateway.v1.GetUserReply
+	4,  // 10: gateway.v1.GatewayService.ListUsersWithPage:output_type -> gateway.v1.ListUsersReply
+	9,  // 11: gateway.v1.GatewayService.GetGameApp:output_type -> gateway.v1.GetGameAppReply
+	11, // 12: gateway.v1.GatewayService.GetUserGameAppStats:output_type -> gateway.v1.GetUserGameAppStatsReply
+	8,  // [8:13] is the sub-list for method output_type
+	3,  // [3:8] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_gateway_v1_gateway_proto_init() }
@@ -667,7 +765,7 @@ func file_gateway_v1_gateway_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gateway_v1_gateway_proto_rawDesc), len(file_gateway_v1_gateway_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

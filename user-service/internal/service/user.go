@@ -74,3 +74,13 @@ func (s *UserService) Login(ctx context.Context, in *v1.LoginRequest) (*v1.Login
 		Token: *token,
 	}, nil
 }
+
+func (s *UserService) GetUserTotal(ctx context.Context, in *v1.GetUserTotalRequest) (*v1.GetUserTotalReply, error) {
+	total, err := s.uc.GetUserCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.GetUserTotalReply{
+		Total: uint64(total),
+	}, nil
+}

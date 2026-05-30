@@ -21,6 +21,7 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationGatewayServiceGetGameApp = "/gateway.v1.GatewayService/GetGameApp"
 const OperationGatewayServiceGetGatewayInfo = "/gateway.v1.GatewayService/GetGatewayInfo"
+const OperationGatewayServiceGetUserGameAppStats = "/gateway.v1.GatewayService/GetUserGameAppStats"
 const OperationGatewayServiceListUsersWithPage = "/gateway.v1.GatewayService/ListUsersWithPage"
 const OperationGatewayServiceLogin = "/gateway.v1.GatewayService/Login"
 
@@ -28,6 +29,8 @@ type GatewayServiceHTTPServer interface {
 	GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppReply, error)
 	// GetGatewayInfo 获取网关信息
 	GetGatewayInfo(context.Context, *GetUserRequest) (*GetUserReply, error)
+	// GetUserGameAppStats用户和游戏统计接口
+	GetUserGameAppStats(context.Context, *GetUserGameAppStatsRequest) (*GetUserGameAppStatsReply, error)
 	// ListUsersWithPage分页查询用户列表
 	// post body json格式，参数放在请求体中
 	ListUsersWithPage(context.Context, *ListUsersRequest) (*ListUsersReply, error)
@@ -41,6 +44,7 @@ func RegisterGatewayServiceHTTPServer(s *http.Server, srv GatewayServiceHTTPServ
 	r.GET("/v1/users/{id}", _GatewayService_GetGatewayInfo0_HTTP_Handler(srv))
 	r.POST("/v1/users", _GatewayService_ListUsersWithPage0_HTTP_Handler(srv))
 	r.GET("/v1/game_app/{id}", _GatewayService_GetGameApp0_HTTP_Handler(srv))
+	r.GET("/v1/user_game_app_stats", _GatewayService_GetUserGameAppStats0_HTTP_Handler(srv))
 }
 
 func _GatewayService_Login0_HTTP_Handler(srv GatewayServiceHTTPServer) func(ctx http.Context) error {
@@ -131,10 +135,31 @@ func _GatewayService_GetGameApp0_HTTP_Handler(srv GatewayServiceHTTPServer) func
 	}
 }
 
+func _GatewayService_GetUserGameAppStats0_HTTP_Handler(srv GatewayServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetUserGameAppStatsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationGatewayServiceGetUserGameAppStats)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetUserGameAppStats(ctx, req.(*GetUserGameAppStatsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserGameAppStatsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type GatewayServiceHTTPClient interface {
 	GetGameApp(ctx context.Context, req *GetGameAppRequest, opts ...http.CallOption) (rsp *GetGameAppReply, err error)
 	// GetGatewayInfo 获取网关信息
 	GetGatewayInfo(ctx context.Context, req *GetUserRequest, opts ...http.CallOption) (rsp *GetUserReply, err error)
+	// GetUserGameAppStats用户和游戏统计接口
+	GetUserGameAppStats(ctx context.Context, req *GetUserGameAppStatsRequest, opts ...http.CallOption) (rsp *GetUserGameAppStatsReply, err error)
 	// ListUsersWithPage分页查询用户列表
 	// post body json格式，参数放在请求体中
 	ListUsersWithPage(ctx context.Context, req *ListUsersRequest, opts ...http.CallOption) (rsp *ListUsersReply, err error)
@@ -169,6 +194,20 @@ func (c *GatewayServiceHTTPClientImpl) GetGatewayInfo(ctx context.Context, in *G
 	pattern := "/v1/users/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationGatewayServiceGetGatewayInfo))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// GetUserGameAppStats用户和游戏统计接口
+func (c *GatewayServiceHTTPClientImpl) GetUserGameAppStats(ctx context.Context, in *GetUserGameAppStatsRequest, opts ...http.CallOption) (*GetUserGameAppStatsReply, error) {
+	var out GetUserGameAppStatsReply
+	pattern := "/v1/user_game_app_stats"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationGatewayServiceGetUserGameAppStats))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

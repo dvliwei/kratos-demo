@@ -16,6 +16,9 @@ service User {
 
   // 分页查询用户列表
   rpc ListUsersWithPage (ListUsersRequest) returns (ListUsersReply);
+
+  //查询用户总数
+  rpc GetUserTotal (GetUserTotalRequest) returns (GetUserTotalReply);
 }
 
 // 请求参数
@@ -56,3 +59,12 @@ message ListUsersReply {
   uint32 total = 1; // 总记录数
   repeated SearchUser users = 2; // 用户列表
 }
+// 查询用户总数返回结果
+message GetUserTotalReply {
+  uint64 total = 1; // 总记录数
+}
+// 查询用户总数请求参数
+message GetUserTotalRequest {
+  // 无需参数
+}
+

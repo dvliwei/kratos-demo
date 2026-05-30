@@ -24,10 +24,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GatewayService_Login_FullMethodName             = "/gateway.v1.GatewayService/Login"
-	GatewayService_GetGatewayInfo_FullMethodName    = "/gateway.v1.GatewayService/GetGatewayInfo"
-	GatewayService_ListUsersWithPage_FullMethodName = "/gateway.v1.GatewayService/ListUsersWithPage"
-	GatewayService_GetGameApp_FullMethodName        = "/gateway.v1.GatewayService/GetGameApp"
+	GatewayService_Login_FullMethodName               = "/gateway.v1.GatewayService/Login"
+	GatewayService_GetGatewayInfo_FullMethodName      = "/gateway.v1.GatewayService/GetGatewayInfo"
+	GatewayService_ListUsersWithPage_FullMethodName   = "/gateway.v1.GatewayService/ListUsersWithPage"
+	GatewayService_GetGameApp_FullMethodName          = "/gateway.v1.GatewayService/GetGameApp"
+	GatewayService_GetUserGameAppStats_FullMethodName = "/gateway.v1.GatewayService/GetUserGameAppStats"
 )
 
 // GatewayServiceClient is the client API for GatewayService service.
@@ -44,6 +45,8 @@ type GatewayServiceClient interface {
 	// post body json格式，参数放在请求体中
 	ListUsersWithPage(ctx context.Context, in *ListUsersRequest, opts ...grpc.CallOption) (*ListUsersReply, error)
 	GetGameApp(ctx context.Context, in *GetGameAppRequest, opts ...grpc.CallOption) (*GetGameAppReply, error)
+	// 用户和游戏统计接口
+	GetUserGameAppStats(ctx context.Context, in *GetUserGameAppStatsRequest, opts ...grpc.CallOption) (*GetUserGameAppStatsReply, error)
 }
 
 type gatewayServiceClient struct {
@@ -94,6 +97,16 @@ func (c *gatewayServiceClient) GetGameApp(ctx context.Context, in *GetGameAppReq
 	return out, nil
 }
 
+func (c *gatewayServiceClient) GetUserGameAppStats(ctx context.Context, in *GetUserGameAppStatsRequest, opts ...grpc.CallOption) (*GetUserGameAppStatsReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserGameAppStatsReply)
+	err := c.cc.Invoke(ctx, GatewayService_GetUserGameAppStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GatewayServiceServer is the server API for GatewayService service.
 // All implementations must embed UnimplementedGatewayServiceServer
 // for forward compatibility.
@@ -108,6 +121,8 @@ type GatewayServiceServer interface {
 	// post body json格式，参数放在请求体中
 	ListUsersWithPage(context.Context, *ListUsersRequest) (*ListUsersReply, error)
 	GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppReply, error)
+	// 用户和游戏统计接口
+	GetUserGameAppStats(context.Context, *GetUserGameAppStatsRequest) (*GetUserGameAppStatsReply, error)
 	mustEmbedUnimplementedGatewayServiceServer()
 }
 
@@ -129,6 +144,9 @@ func (UnimplementedGatewayServiceServer) ListUsersWithPage(context.Context, *Lis
 }
 func (UnimplementedGatewayServiceServer) GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetGameApp not implemented")
+}
+func (UnimplementedGatewayServiceServer) GetUserGameAppStats(context.Context, *GetUserGameAppStatsRequest) (*GetUserGameAppStatsReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserGameAppStats not implemented")
 }
 func (UnimplementedGatewayServiceServer) mustEmbedUnimplementedGatewayServiceServer() {}
 func (UnimplementedGatewayServiceServer) testEmbeddedByValue()                        {}
@@ -223,6 +241,24 @@ func _GatewayService_GetGameApp_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GatewayService_GetUserGameAppStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserGameAppStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServiceServer).GetUserGameAppStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GatewayService_GetUserGameAppStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServiceServer).GetUserGameAppStats(ctx, req.(*GetUserGameAppStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GatewayService_ServiceDesc is the grpc.ServiceDesc for GatewayService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -245,6 +281,10 @@ var GatewayService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGameApp",
 			Handler:    _GatewayService_GetGameApp_Handler,
+		},
+		{
+			MethodName: "GetUserGameAppStats",
+			Handler:    _GatewayService_GetUserGameAppStats_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

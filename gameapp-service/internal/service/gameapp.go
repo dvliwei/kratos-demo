@@ -41,3 +41,13 @@ func (s *GameAppService) GetGameApp(ctx context.Context, req *v1.GetGameAppReque
 		Info: info,
 	}, nil
 }
+
+func (s *GameAppService) CountGameApps(ctx context.Context, req *v1.CountGameAppsRequest) (*v1.CountGameAppsResponse, error) {
+	total, err := s.uc.CountGameApps(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.CountGameAppsResponse{
+		Total: total,
+	}, nil
+}

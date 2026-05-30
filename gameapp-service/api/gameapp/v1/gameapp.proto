@@ -6,6 +6,9 @@ option go_package = "gameapp/v1;gameappv1";
 
 service GameAppService{
   rpc GetGameApp(GetGameAppRequest) returns (GetGameAppResponse);
+
+  //统计游戏APP数量
+  rpc CountGameApps(CountGameAppsRequest) returns (CountGameAppsResponse);
 }
 
 message GetGameAppRequest{
@@ -20,4 +23,11 @@ message GameAppInfo{
 }
 message GetGameAppResponse{
   GameAppInfo info = 1;
+}
+
+message CountGameAppsRequest{
+
+}
+message CountGameAppsResponse{
+  uint64 total = 1; // 总记录数
 }

@@ -18,6 +18,7 @@ type UserRepo interface {
 	Login(context.Context, string, string) (*string, *string, error)
 	FindByID(context.Context, uint64) (*User, error)
 	ListUsersWithPage(context.Context, int, int, *SearchUser) ([]*User, int64, error)
+	GetUserCount(context.Context) (uint64, error)
 }
 
 // UserUsecase 包含用户业务规则，定义了用户相关操作的业务逻辑。
@@ -64,4 +65,8 @@ func (uc *UserUsecase) ListUsersWithPage(ctx context.Context, page, pageSize int
 		pageSize = 100
 	}
 	return uc.repo.ListUsersWithPage(ctx, page, pageSize, search)
+}
+
+func (uc *UserUsecase) GetUserCount(ctx context.Context) (uint64, error) {
+	return uc.repo.GetUserCount(ctx)
 }

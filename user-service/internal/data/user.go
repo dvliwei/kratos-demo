@@ -179,3 +179,13 @@ func (r *userRepo) Login(ctx context.Context, email string, password string) (*s
 func userTokenKey(id uint64) string {
 	return fmt.Sprintf("user:token:%d", id)
 }
+
+// GetUserCount 查询用户总数
+func (r *userRepo) GetUserCount(ctx context.Context) (uint64, error) {
+	var count int64
+	err := r.db.WithContext(ctx).Model(&userModel{}).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return uint64(count), nil
+}

@@ -32,6 +32,7 @@ type UserRepo interface {
 	GetUser(ctx context.Context, userID int64) (*User, error)
 	ListUsersWithPage(ctx context.Context, page, pageSize int, search *SearchUser) ([]*User, int64, error)
 	Login(ctx context.Context, email string, password string) (*string, *string, error)
+	GetUserCount(ctx context.Context) (uint64, error)
 }
 type UserUseCase struct {
 	repo UserRepo
@@ -65,4 +66,8 @@ func (a *UserUseCase) Login(ctx context.Context, email string, password string) 
 		return nil, nil, errors.BadRequest("USER_EMAIL_INVALID", "email or password is empty")
 	}
 	return a.repo.Login(ctx, email, password)
+}
+
+func (a *UserUseCase) GetUserCount(ctx context.Context) (uint64, error) {
+	return a.repo.GetUserCount(ctx)
 }

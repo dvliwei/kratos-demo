@@ -27,6 +27,9 @@ type GameApp struct {
 
 type GameAppRepo interface {
 	FindByID(ctx context.Context, id uint64) (*GameApp, error)
+
+	//统计游戏APP数量
+	CountGameApps(ctx context.Context) (uint64, error)
 }
 type GameAppUseCase struct {
 	repo GameAppRepo
@@ -37,4 +40,8 @@ func NewGameAppUseCase(repo GameAppRepo) *GameAppUseCase {
 }
 func (u *GameAppUseCase) GetByIDApp(ctx context.Context, id uint64) (*GameApp, error) {
 	return u.repo.FindByID(ctx, id)
+}
+
+func (u *GameAppUseCase) CountGameApps(ctx context.Context) (uint64, error) {
+	return u.repo.CountGameApps(ctx)
 }
