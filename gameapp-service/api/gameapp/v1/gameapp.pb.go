@@ -21,6 +21,173 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type GameAppsSearch struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Name  string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// optional 表示字段是可选的，可以不提供
+	TypeOs        *int32 `protobuf:"varint,2,opt,name=type_os,json=typeOs,proto3,oneof" json:"type_os,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GameAppsSearch) Reset() {
+	*x = GameAppsSearch{}
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GameAppsSearch) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GameAppsSearch) ProtoMessage() {}
+
+func (x *GameAppsSearch) ProtoReflect() protoreflect.Message {
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GameAppsSearch.ProtoReflect.Descriptor instead.
+func (*GameAppsSearch) Descriptor() ([]byte, []int) {
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *GameAppsSearch) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GameAppsSearch) GetTypeOs() int32 {
+	if x != nil && x.TypeOs != nil {
+		return *x.TypeOs
+	}
+	return 0
+}
+
+type ListGameAppsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	Search        *GameAppsSearch        `protobuf:"bytes,4,opt,name=search,proto3" json:"search,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListGameAppsRequest) Reset() {
+	*x = ListGameAppsRequest{}
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListGameAppsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListGameAppsRequest) ProtoMessage() {}
+
+func (x *ListGameAppsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListGameAppsRequest.ProtoReflect.Descriptor instead.
+func (*ListGameAppsRequest) Descriptor() ([]byte, []int) {
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ListGameAppsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ListGameAppsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListGameAppsRequest) GetSearch() *GameAppsSearch {
+	if x != nil {
+		return x.Search
+	}
+	return nil
+}
+
+type ListGameAppsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 游戏APP列表
+	// repeated 表示一个字段可以有多个值，类似于数组或列表
+	Infos         []*GameAppInfo `protobuf:"bytes,1,rep,name=infos,proto3" json:"infos,omitempty"`
+	Total         uint64         `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"` // 总记录数
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListGameAppsResponse) Reset() {
+	*x = ListGameAppsResponse{}
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListGameAppsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListGameAppsResponse) ProtoMessage() {}
+
+func (x *ListGameAppsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListGameAppsResponse.ProtoReflect.Descriptor instead.
+func (*ListGameAppsResponse) Descriptor() ([]byte, []int) {
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ListGameAppsResponse) GetInfos() []*GameAppInfo {
+	if x != nil {
+		return x.Infos
+	}
+	return nil
+}
+
+func (x *ListGameAppsResponse) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 type GetGameAppRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -30,7 +197,7 @@ type GetGameAppRequest struct {
 
 func (x *GetGameAppRequest) Reset() {
 	*x = GetGameAppRequest{}
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[0]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +209,7 @@ func (x *GetGameAppRequest) String() string {
 func (*GetGameAppRequest) ProtoMessage() {}
 
 func (x *GetGameAppRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[0]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +222,7 @@ func (x *GetGameAppRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGameAppRequest.ProtoReflect.Descriptor instead.
 func (*GetGameAppRequest) Descriptor() ([]byte, []int) {
-	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{0}
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetGameAppRequest) GetId() uint64 {
@@ -78,7 +245,7 @@ type GameAppInfo struct {
 
 func (x *GameAppInfo) Reset() {
 	*x = GameAppInfo{}
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[1]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -90,7 +257,7 @@ func (x *GameAppInfo) String() string {
 func (*GameAppInfo) ProtoMessage() {}
 
 func (x *GameAppInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[1]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -103,7 +270,7 @@ func (x *GameAppInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameAppInfo.ProtoReflect.Descriptor instead.
 func (*GameAppInfo) Descriptor() ([]byte, []int) {
-	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{1}
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GameAppInfo) GetId() uint64 {
@@ -150,7 +317,7 @@ type GetGameAppResponse struct {
 
 func (x *GetGameAppResponse) Reset() {
 	*x = GetGameAppResponse{}
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[2]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -162,7 +329,7 @@ func (x *GetGameAppResponse) String() string {
 func (*GetGameAppResponse) ProtoMessage() {}
 
 func (x *GetGameAppResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[2]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -175,7 +342,7 @@ func (x *GetGameAppResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGameAppResponse.ProtoReflect.Descriptor instead.
 func (*GetGameAppResponse) Descriptor() ([]byte, []int) {
-	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{2}
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetGameAppResponse) GetInfo() *GameAppInfo {
@@ -193,7 +360,7 @@ type CountGameAppsRequest struct {
 
 func (x *CountGameAppsRequest) Reset() {
 	*x = CountGameAppsRequest{}
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[3]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -205,7 +372,7 @@ func (x *CountGameAppsRequest) String() string {
 func (*CountGameAppsRequest) ProtoMessage() {}
 
 func (x *CountGameAppsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[3]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -218,7 +385,7 @@ func (x *CountGameAppsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CountGameAppsRequest.ProtoReflect.Descriptor instead.
 func (*CountGameAppsRequest) Descriptor() ([]byte, []int) {
-	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{3}
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{6}
 }
 
 type CountGameAppsResponse struct {
@@ -230,7 +397,7 @@ type CountGameAppsResponse struct {
 
 func (x *CountGameAppsResponse) Reset() {
 	*x = CountGameAppsResponse{}
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[4]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -242,7 +409,7 @@ func (x *CountGameAppsResponse) String() string {
 func (*CountGameAppsResponse) ProtoMessage() {}
 
 func (x *CountGameAppsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_gameapp_v1_gameapp_proto_msgTypes[4]
+	mi := &file_gameapp_v1_gameapp_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -255,7 +422,7 @@ func (x *CountGameAppsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CountGameAppsResponse.ProtoReflect.Descriptor instead.
 func (*CountGameAppsResponse) Descriptor() ([]byte, []int) {
-	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{4}
+	return file_gameapp_v1_gameapp_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CountGameAppsResponse) GetTotal() uint64 {
@@ -270,7 +437,19 @@ var File_gameapp_v1_gameapp_proto protoreflect.FileDescriptor
 const file_gameapp_v1_gameapp_proto_rawDesc = "" +
 	"\n" +
 	"\x18gameapp/v1/gameapp.proto\x12\n" +
-	"gameapp.v1\"#\n" +
+	"gameapp.v1\"N\n" +
+	"\x0eGameAppsSearch\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1c\n" +
+	"\atype_os\x18\x02 \x01(\x05H\x00R\x06typeOs\x88\x01\x01B\n" +
+	"\n" +
+	"\b_type_os\"z\n" +
+	"\x13ListGameAppsRequest\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\x122\n" +
+	"\x06search\x18\x04 \x01(\v2\x1a.gameapp.v1.GameAppsSearchR\x06search\"[\n" +
+	"\x14ListGameAppsResponse\x12-\n" +
+	"\x05infos\x18\x01 \x03(\v2\x17.gameapp.v1.GameAppInfoR\x05infos\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"#\n" +
 	"\x11GetGameAppRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"z\n" +
 	"\vGameAppInfo\x12\x0e\n" +
@@ -283,10 +462,11 @@ const file_gameapp_v1_gameapp_proto_rawDesc = "" +
 	"\x04info\x18\x01 \x01(\v2\x17.gameapp.v1.GameAppInfoR\x04info\"\x16\n" +
 	"\x14CountGameAppsRequest\"-\n" +
 	"\x15CountGameAppsResponse\x12\x14\n" +
-	"\x05total\x18\x01 \x01(\x04R\x05total2\xb3\x01\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total2\x8e\x02\n" +
 	"\x0eGameAppService\x12K\n" +
 	"\n" +
-	"GetGameApp\x12\x1d.gameapp.v1.GetGameAppRequest\x1a\x1e.gameapp.v1.GetGameAppResponse\x12T\n" +
+	"GetGameApp\x12\x1d.gameapp.v1.GetGameAppRequest\x1a\x1e.gameapp.v1.GetGameAppResponse\x12Y\n" +
+	"\x14ListGameAppsWithPage\x12\x1f.gameapp.v1.ListGameAppsRequest\x1a .gameapp.v1.ListGameAppsResponse\x12T\n" +
 	"\rCountGameApps\x12 .gameapp.v1.CountGameAppsRequest\x1a!.gameapp.v1.CountGameAppsResponseB\x16Z\x14gameapp/v1;gameappv1b\x06proto3"
 
 var (
@@ -301,25 +481,32 @@ func file_gameapp_v1_gameapp_proto_rawDescGZIP() []byte {
 	return file_gameapp_v1_gameapp_proto_rawDescData
 }
 
-var file_gameapp_v1_gameapp_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_gameapp_v1_gameapp_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_gameapp_v1_gameapp_proto_goTypes = []any{
-	(*GetGameAppRequest)(nil),     // 0: gameapp.v1.GetGameAppRequest
-	(*GameAppInfo)(nil),           // 1: gameapp.v1.GameAppInfo
-	(*GetGameAppResponse)(nil),    // 2: gameapp.v1.GetGameAppResponse
-	(*CountGameAppsRequest)(nil),  // 3: gameapp.v1.CountGameAppsRequest
-	(*CountGameAppsResponse)(nil), // 4: gameapp.v1.CountGameAppsResponse
+	(*GameAppsSearch)(nil),        // 0: gameapp.v1.GameAppsSearch
+	(*ListGameAppsRequest)(nil),   // 1: gameapp.v1.ListGameAppsRequest
+	(*ListGameAppsResponse)(nil),  // 2: gameapp.v1.ListGameAppsResponse
+	(*GetGameAppRequest)(nil),     // 3: gameapp.v1.GetGameAppRequest
+	(*GameAppInfo)(nil),           // 4: gameapp.v1.GameAppInfo
+	(*GetGameAppResponse)(nil),    // 5: gameapp.v1.GetGameAppResponse
+	(*CountGameAppsRequest)(nil),  // 6: gameapp.v1.CountGameAppsRequest
+	(*CountGameAppsResponse)(nil), // 7: gameapp.v1.CountGameAppsResponse
 }
 var file_gameapp_v1_gameapp_proto_depIdxs = []int32{
-	1, // 0: gameapp.v1.GetGameAppResponse.info:type_name -> gameapp.v1.GameAppInfo
-	0, // 1: gameapp.v1.GameAppService.GetGameApp:input_type -> gameapp.v1.GetGameAppRequest
-	3, // 2: gameapp.v1.GameAppService.CountGameApps:input_type -> gameapp.v1.CountGameAppsRequest
-	2, // 3: gameapp.v1.GameAppService.GetGameApp:output_type -> gameapp.v1.GetGameAppResponse
-	4, // 4: gameapp.v1.GameAppService.CountGameApps:output_type -> gameapp.v1.CountGameAppsResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0, // 0: gameapp.v1.ListGameAppsRequest.search:type_name -> gameapp.v1.GameAppsSearch
+	4, // 1: gameapp.v1.ListGameAppsResponse.infos:type_name -> gameapp.v1.GameAppInfo
+	4, // 2: gameapp.v1.GetGameAppResponse.info:type_name -> gameapp.v1.GameAppInfo
+	3, // 3: gameapp.v1.GameAppService.GetGameApp:input_type -> gameapp.v1.GetGameAppRequest
+	1, // 4: gameapp.v1.GameAppService.ListGameAppsWithPage:input_type -> gameapp.v1.ListGameAppsRequest
+	6, // 5: gameapp.v1.GameAppService.CountGameApps:input_type -> gameapp.v1.CountGameAppsRequest
+	5, // 6: gameapp.v1.GameAppService.GetGameApp:output_type -> gameapp.v1.GetGameAppResponse
+	2, // 7: gameapp.v1.GameAppService.ListGameAppsWithPage:output_type -> gameapp.v1.ListGameAppsResponse
+	7, // 8: gameapp.v1.GameAppService.CountGameApps:output_type -> gameapp.v1.CountGameAppsResponse
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_gameapp_v1_gameapp_proto_init() }
@@ -327,13 +514,14 @@ func file_gameapp_v1_gameapp_proto_init() {
 	if File_gameapp_v1_gameapp_proto != nil {
 		return
 	}
+	file_gameapp_v1_gameapp_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gameapp_v1_gameapp_proto_rawDesc), len(file_gameapp_v1_gameapp_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

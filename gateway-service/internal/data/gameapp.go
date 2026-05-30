@@ -68,3 +68,32 @@ func (r *gameAppRepo) CountGameApps(ctx context.Context) (uint64, error) {
 	}
 	return resp.Total, nil
 }
+
+func (r *gameAppRepo) ListGameAppsWithPage(ctx context.Context, page, pageSize int, search *biz.GameAppsSearch) ([]*biz.GameAppInfoV2, int64, error) {
+	if rid := requestid.FromContext(ctx); rid != "" {
+		ctx = grpcmetadata.AppendToOutgoingContext(ctx, requestid.MetadataKey, rid)
+	}
+	appSearch := &gameappv1.GameAppsSearch{
+		Name:   search.Name,
+		TypeOs: search.TypeOs,
+	}
+	resp, err := r.client.ListGameAppsWithPage(ctx, &gameappv1.ListGameAppsRequest{
+		Page:     int32(page),
+		PageSize: int32(pageSize),
+		Search:   appSearch,
+	})
+	if err != nil {
+		return nil, 0, err
+	}
+	infos := make([]*biz.GameAppInfoV2, 0, len(resp.Infos))
+	for _, info := range resp.Infos {
+		infos = append(infos, &biz.GameAppInfoV2{
+			Id:     info.Id,
+			Name:   info.Name,
+			AppId:  info.AppId,
+			AppKey: info.AppKey,
+			GameId: info.GameId,
+		})
+	}
+	return infos, int64(resp.Total), nil
+}

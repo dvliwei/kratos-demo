@@ -41,6 +41,13 @@ service GatewayService {
       get: "/v1/game_app/{id}"
     };
   }
+  //分页查询游戏列表
+  rpc ListGameAppsWithPage(ListGameAppsRequest) returns (ListGameAppsReply) {
+    option (google.api.http) = {
+      post: "/v1/game_apps"
+      body: "*"
+    };
+  }
   //用户和游戏统计接口
   rpc GetUserGameAppStats(GetUserGameAppStatsRequest) returns (GetUserGameAppStatsReply) {
     option (google.api.http) = {
@@ -103,4 +110,29 @@ message GetUserGameAppStatsRequest {
 message GetUserGameAppStatsReply{
   int64 total_users = 1; // 用户总数
   int64 total_game_apps = 2; // 游戏应用总数
+}
+
+message  GameAppsSearch{
+  string name = 1;
+  //optional 表示字段是可选的，可以不提供
+  optional int32 type_os = 2;
+}
+message ListGameAppsRequest{
+  int32 page = 2;
+  int32 page_size = 3;
+  GameAppsSearch search = 4;
+}
+
+message GameAppInfoV2{
+  uint64 id = 1;
+  int64 game_id = 2;
+  string app_id = 3;
+  string name= 4;
+  string app_key = 5;
+}
+message  ListGameAppsReply{
+  // 游戏APP列表
+  //repeated 表示一个字段可以有多个值，类似于数组或列表
+  repeated GameAppInfoV2 infos = 1;
+  uint64 total = 2; // 总记录数
 }

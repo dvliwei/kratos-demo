@@ -38,6 +38,7 @@ config:
 api:
 	protoc --proto_path=./api \
 	       --proto_path=./third_party \
+	       --experimental_allow_proto3_optional \
  	       --go_out=paths=source_relative:./api \
  	       --go-http_out=paths=source_relative:./api \
  	       --go-grpc_out=paths=source_relative:./api \

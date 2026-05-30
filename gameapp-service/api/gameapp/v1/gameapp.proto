@@ -6,9 +6,27 @@ option go_package = "gameapp/v1;gameappv1";
 
 service GameAppService{
   rpc GetGameApp(GetGameAppRequest) returns (GetGameAppResponse);
-
+  //分页查询游戏APP
+  rpc ListGameAppsWithPage(ListGameAppsRequest) returns (ListGameAppsResponse);
   //统计游戏APP数量
   rpc CountGameApps(CountGameAppsRequest) returns (CountGameAppsResponse);
+}
+message  GameAppsSearch{
+  string name = 1;
+  //optional 表示字段是可选的，可以不提供
+  optional int32 type_os = 2;
+}
+message ListGameAppsRequest{
+  int32 page = 2;
+  int32 page_size = 3;
+  GameAppsSearch search = 4;
+}
+
+message  ListGameAppsResponse{
+  // 游戏APP列表
+  //repeated 表示一个字段可以有多个值，类似于数组或列表
+   repeated GameAppInfo infos = 1;
+    uint64 total = 2; // 总记录数
 }
 
 message GetGameAppRequest{

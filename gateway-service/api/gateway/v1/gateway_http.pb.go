@@ -22,6 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationGatewayServiceGetGameApp = "/gateway.v1.GatewayService/GetGameApp"
 const OperationGatewayServiceGetGatewayInfo = "/gateway.v1.GatewayService/GetGatewayInfo"
 const OperationGatewayServiceGetUserGameAppStats = "/gateway.v1.GatewayService/GetUserGameAppStats"
+const OperationGatewayServiceListGameAppsWithPage = "/gateway.v1.GatewayService/ListGameAppsWithPage"
 const OperationGatewayServiceListUsersWithPage = "/gateway.v1.GatewayService/ListUsersWithPage"
 const OperationGatewayServiceLogin = "/gateway.v1.GatewayService/Login"
 
@@ -31,6 +32,8 @@ type GatewayServiceHTTPServer interface {
 	GetGatewayInfo(context.Context, *GetUserRequest) (*GetUserReply, error)
 	// GetUserGameAppStats用户和游戏统计接口
 	GetUserGameAppStats(context.Context, *GetUserGameAppStatsRequest) (*GetUserGameAppStatsReply, error)
+	// ListGameAppsWithPage分页查询游戏列表
+	ListGameAppsWithPage(context.Context, *ListGameAppsRequest) (*ListGameAppsReply, error)
 	// ListUsersWithPage分页查询用户列表
 	// post body json格式，参数放在请求体中
 	ListUsersWithPage(context.Context, *ListUsersRequest) (*ListUsersReply, error)
@@ -44,6 +47,7 @@ func RegisterGatewayServiceHTTPServer(s *http.Server, srv GatewayServiceHTTPServ
 	r.GET("/v1/users/{id}", _GatewayService_GetGatewayInfo0_HTTP_Handler(srv))
 	r.POST("/v1/users", _GatewayService_ListUsersWithPage0_HTTP_Handler(srv))
 	r.GET("/v1/game_app/{id}", _GatewayService_GetGameApp0_HTTP_Handler(srv))
+	r.POST("/v1/game_apps", _GatewayService_ListGameAppsWithPage0_HTTP_Handler(srv))
 	r.GET("/v1/user_game_app_stats", _GatewayService_GetUserGameAppStats0_HTTP_Handler(srv))
 }
 
@@ -135,6 +139,28 @@ func _GatewayService_GetGameApp0_HTTP_Handler(srv GatewayServiceHTTPServer) func
 	}
 }
 
+func _GatewayService_ListGameAppsWithPage0_HTTP_Handler(srv GatewayServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in ListGameAppsRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationGatewayServiceListGameAppsWithPage)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.ListGameAppsWithPage(ctx, req.(*ListGameAppsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*ListGameAppsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _GatewayService_GetUserGameAppStats0_HTTP_Handler(srv GatewayServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetUserGameAppStatsRequest
@@ -160,6 +186,8 @@ type GatewayServiceHTTPClient interface {
 	GetGatewayInfo(ctx context.Context, req *GetUserRequest, opts ...http.CallOption) (rsp *GetUserReply, err error)
 	// GetUserGameAppStats用户和游戏统计接口
 	GetUserGameAppStats(ctx context.Context, req *GetUserGameAppStatsRequest, opts ...http.CallOption) (rsp *GetUserGameAppStatsReply, err error)
+	// ListGameAppsWithPage分页查询游戏列表
+	ListGameAppsWithPage(ctx context.Context, req *ListGameAppsRequest, opts ...http.CallOption) (rsp *ListGameAppsReply, err error)
 	// ListUsersWithPage分页查询用户列表
 	// post body json格式，参数放在请求体中
 	ListUsersWithPage(ctx context.Context, req *ListUsersRequest, opts ...http.CallOption) (rsp *ListUsersReply, err error)
@@ -210,6 +238,20 @@ func (c *GatewayServiceHTTPClientImpl) GetUserGameAppStats(ctx context.Context, 
 	opts = append(opts, http.Operation(OperationGatewayServiceGetUserGameAppStats))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// ListGameAppsWithPage分页查询游戏列表
+func (c *GatewayServiceHTTPClientImpl) ListGameAppsWithPage(ctx context.Context, in *ListGameAppsRequest, opts ...http.CallOption) (*ListGameAppsReply, error) {
+	var out ListGameAppsReply
+	pattern := "/v1/game_apps"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationGatewayServiceListGameAppsWithPage))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

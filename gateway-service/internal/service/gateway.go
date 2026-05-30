@@ -15,6 +15,8 @@ import (
 	v1 "gateway-service/api/gateway/v1"
 	"gateway-service/internal/biz"
 	"strconv"
+
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type GatewayService struct {
@@ -110,4 +112,40 @@ func (a *GatewayService) Login(ctx context.Context, req *v1.LoginRequest) (*v1.L
 		Name:  *name,
 		Token: *token,
 	}, nil
+}
+
+func (u *GatewayService) ListGameAppsWithPage(ctx context.Context, req *v1.ListGameAppsRequest) (*v1.ListGameAppsReply, error) {
+	infos, total, err := u.gameAppUC.ListGameAppsWithPage(ctx, int(req.GetPage()), int(req.GetPageSize()), &biz.GameAppsSearch{
+		Name:   req.GetSearch().GetName(),
+		TypeOs: gameAppsSearchTypeOS(req.GetSearch()),
+	})
+	if err != nil {
+		return nil, err
+	}
+	gameAppInfos := make([]*v1.GameAppInfoV2, 0, len(infos))
+	for _, info := range infos {
+		gameAppInfos = append(gameAppInfos, &v1.GameAppInfoV2{
+			Id:     info.Id,
+			AppId:  info.AppId,
+			GameId: info.GameId,
+			Name:   info.Name,
+			AppKey: info.AppKey,
+		})
+	}
+	return &v1.ListGameAppsReply{
+		Total: uint64(total),
+		Infos: gameAppInfos,
+	}, nil
+}
+
+func gameAppsSearchTypeOS(search *v1.GameAppsSearch) *int32 {
+	if search == nil {
+		return nil
+	}
+	field := search.ProtoReflect().Descriptor().Fields().ByName(protoreflect.Name("type_os"))
+	if field == nil || !search.ProtoReflect().Has(field) {
+		return nil
+	}
+	typeOS := search.GetTypeOs()
+	return &typeOS
 }

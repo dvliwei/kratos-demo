@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GameAppService_GetGameApp_FullMethodName    = "/gameapp.v1.GameAppService/GetGameApp"
-	GameAppService_CountGameApps_FullMethodName = "/gameapp.v1.GameAppService/CountGameApps"
+	GameAppService_GetGameApp_FullMethodName           = "/gameapp.v1.GameAppService/GetGameApp"
+	GameAppService_ListGameAppsWithPage_FullMethodName = "/gameapp.v1.GameAppService/ListGameAppsWithPage"
+	GameAppService_CountGameApps_FullMethodName        = "/gameapp.v1.GameAppService/CountGameApps"
 )
 
 // GameAppServiceClient is the client API for GameAppService service.
@@ -28,6 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameAppServiceClient interface {
 	GetGameApp(ctx context.Context, in *GetGameAppRequest, opts ...grpc.CallOption) (*GetGameAppResponse, error)
+	// 分页查询游戏APP
+	ListGameAppsWithPage(ctx context.Context, in *ListGameAppsRequest, opts ...grpc.CallOption) (*ListGameAppsResponse, error)
 	// 统计游戏APP数量
 	CountGameApps(ctx context.Context, in *CountGameAppsRequest, opts ...grpc.CallOption) (*CountGameAppsResponse, error)
 }
@@ -50,6 +53,16 @@ func (c *gameAppServiceClient) GetGameApp(ctx context.Context, in *GetGameAppReq
 	return out, nil
 }
 
+func (c *gameAppServiceClient) ListGameAppsWithPage(ctx context.Context, in *ListGameAppsRequest, opts ...grpc.CallOption) (*ListGameAppsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListGameAppsResponse)
+	err := c.cc.Invoke(ctx, GameAppService_ListGameAppsWithPage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *gameAppServiceClient) CountGameApps(ctx context.Context, in *CountGameAppsRequest, opts ...grpc.CallOption) (*CountGameAppsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CountGameAppsResponse)
@@ -65,6 +78,8 @@ func (c *gameAppServiceClient) CountGameApps(ctx context.Context, in *CountGameA
 // for forward compatibility.
 type GameAppServiceServer interface {
 	GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppResponse, error)
+	// 分页查询游戏APP
+	ListGameAppsWithPage(context.Context, *ListGameAppsRequest) (*ListGameAppsResponse, error)
 	// 统计游戏APP数量
 	CountGameApps(context.Context, *CountGameAppsRequest) (*CountGameAppsResponse, error)
 	mustEmbedUnimplementedGameAppServiceServer()
@@ -79,6 +94,9 @@ type UnimplementedGameAppServiceServer struct{}
 
 func (UnimplementedGameAppServiceServer) GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetGameApp not implemented")
+}
+func (UnimplementedGameAppServiceServer) ListGameAppsWithPage(context.Context, *ListGameAppsRequest) (*ListGameAppsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListGameAppsWithPage not implemented")
 }
 func (UnimplementedGameAppServiceServer) CountGameApps(context.Context, *CountGameAppsRequest) (*CountGameAppsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CountGameApps not implemented")
@@ -122,6 +140,24 @@ func _GameAppService_GetGameApp_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameAppService_ListGameAppsWithPage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListGameAppsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameAppServiceServer).ListGameAppsWithPage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GameAppService_ListGameAppsWithPage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameAppServiceServer).ListGameAppsWithPage(ctx, req.(*ListGameAppsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _GameAppService_CountGameApps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CountGameAppsRequest)
 	if err := dec(in); err != nil {
@@ -150,6 +186,10 @@ var GameAppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGameApp",
 			Handler:    _GameAppService_GetGameApp_Handler,
+		},
+		{
+			MethodName: "ListGameAppsWithPage",
+			Handler:    _GameAppService_ListGameAppsWithPage_Handler,
 		},
 		{
 			MethodName: "CountGameApps",

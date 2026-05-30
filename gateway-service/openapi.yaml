@@ -43,6 +43,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/gateway.v1.GetGameAppReply'
+    /v1/game_apps:
+        post:
+            tags:
+                - GatewayService
+            description: 分页查询游戏列表
+            operationId: GatewayService_ListGameAppsWithPage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/gateway.v1.ListGameAppsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/gateway.v1.ListGameAppsReply'
     /v1/login:
         post:
             tags:
@@ -128,6 +147,28 @@ components:
                     type: string
                 appKey:
                     type: string
+        gateway.v1.GameAppInfoV2:
+            type: object
+            properties:
+                id:
+                    type: string
+                gameId:
+                    type: string
+                appId:
+                    type: string
+                name:
+                    type: string
+                appKey:
+                    type: string
+        gateway.v1.GameAppsSearch:
+            type: object
+            properties:
+                name:
+                    type: string
+                typeOs:
+                    type: integer
+                    description: optional 表示字段是可选的，可以不提供
+                    format: int32
         gateway.v1.GetGameAppReply:
             type: object
             properties:
@@ -150,6 +191,29 @@ components:
                 email:
                     type: string
             description: 查询用户响应
+        gateway.v1.ListGameAppsReply:
+            type: object
+            properties:
+                infos:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/gateway.v1.GameAppInfoV2'
+                    description: |-
+                        游戏APP列表
+                        repeated 表示一个字段可以有多个值，类似于数组或列表
+                total:
+                    type: string
+        gateway.v1.ListGameAppsRequest:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    format: int32
+                pageSize:
+                    type: integer
+                    format: int32
+                search:
+                    $ref: '#/components/schemas/gateway.v1.GameAppsSearch'
         gateway.v1.ListUsersReply:
             type: object
             properties:

@@ -14,6 +14,8 @@ import (
 	"context"
 	v1 "gameapp-service/api/gameapp/v1"
 	"gameapp-service/internal/biz"
+
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type GameAppService struct {
@@ -50,4 +52,52 @@ func (s *GameAppService) CountGameApps(ctx context.Context, req *v1.CountGameApp
 	return &v1.CountGameAppsResponse{
 		Total: total,
 	}, nil
+}
+
+func (s *GameAppService) ListGameAppsWithPage(ctx context.Context, req *v1.ListGameAppsRequest) (*v1.ListGameAppsResponse, error) {
+	if req.GetPage() < 1 {
+		req.Page = 1
+	}
+	if req.GetPageSize() < 1 {
+		req.PageSize = 10
+	}
+	if req.GetPageSize() > 20 {
+		req.PageSize = 20
+	}
+	var search *biz.GameAppsSearch
+	if req.GetSearch() != nil {
+		search = &biz.GameAppsSearch{
+			Name:   req.GetSearch().GetName(),
+			TypeOs: gameAppsSearchTypeOS(req.GetSearch()),
+		}
+	}
+	gameApps, total, err := s.uc.ListGameAppsWithPage(ctx, int(req.GetPage()), int(req.GetPageSize()), search)
+	if err != nil {
+		return nil, err
+	}
+	gameAppInfos := make([]*v1.GameAppInfo, 0, len(gameApps))
+	for _, gameApp := range gameApps {
+		gameAppInfos = append(gameAppInfos, &v1.GameAppInfo{
+			Id:     gameApp.ID,
+			AppId:  gameApp.AppID,
+			Name:   gameApp.Name,
+			AppKey: gameApp.AppKey,
+		})
+	}
+	return &v1.ListGameAppsResponse{
+		Infos: gameAppInfos,
+		Total: uint64(total),
+	}, nil
+}
+
+func gameAppsSearchTypeOS(search *v1.GameAppsSearch) *int32 {
+	if search == nil {
+		return nil
+	}
+	field := search.ProtoReflect().Descriptor().Fields().ByName(protoreflect.Name("type_os"))
+	if field == nil || !search.ProtoReflect().Has(field) {
+		return nil
+	}
+	typeOS := search.GetTypeOs()
+	return &typeOS
 }
