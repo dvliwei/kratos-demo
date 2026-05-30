@@ -1,0 +1,58 @@
+// 1. 版权/说明注释
+// 2. syntax（必须写 proto3）
+// 3. package（必须写）
+syntax = "proto3";
+// 3. package（重要！Kratos 生成路径靠它）
+package user.v1;
+// 5. 选项（go_package、java_package 等）
+option go_package = "user-service/api/user/v1;v1";
+
+// 用户服务
+service User {
+  //用户邮箱密码登录
+  rpc Login (LoginRequest) returns (LoginReply);
+  // 获取用户信息
+  rpc GetUser (GetUserRequest) returns (GetUserReply);
+
+  // 分页查询用户列表
+  rpc ListUsersWithPage (ListUsersRequest) returns (ListUsersReply);
+}
+
+// 请求参数
+message  LoginRequest{
+  string email = 1;
+  string password = 2;
+}
+// 返回结果
+message  LoginReply{
+  string name = 1;
+  string token = 2;
+}
+
+// 请求参数
+message GetUserRequest {
+  uint64 id = 1;
+}
+
+// 返回结果
+message GetUserReply {
+  uint64 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+message SearchUser {
+  uint64 id = 1;
+  string name = 2;
+  string email = 3;
+}
+// 分页查询请求参数
+message ListUsersRequest {
+  uint32 page = 1; // 页码
+  uint32 size = 2; // 每页数量
+  SearchUser search = 3; // 搜索条件
+}
+message ListUsersReply {
+  uint32 total = 1; // 总记录数
+  repeated SearchUser users = 2; // 用户列表
+}

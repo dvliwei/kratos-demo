@@ -1,0 +1,187 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /helloworld/{name}:
+        get:
+            tags:
+                - Greeter
+            description: Sends a greeting
+            operationId: Greeter_SayHello
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /v1/game_app/{id}:
+        get:
+            tags:
+                - GatewayService
+            operationId: GatewayService_GetGameApp
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/gateway.v1.GetGameAppReply'
+    /v1/login:
+        post:
+            tags:
+                - GatewayService
+            description: 用户邮箱密码登录
+            operationId: GatewayService_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/gateway.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/gateway.v1.LoginReply'
+    /v1/users:
+        post:
+            tags:
+                - GatewayService
+            description: |-
+                分页查询用户列表
+                 post body json格式，参数放在请求体中
+            operationId: GatewayService_ListUsersWithPage
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/gateway.v1.ListUsersRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/gateway.v1.ListUsersReply'
+    /v1/users/{id}:
+        get:
+            tags:
+                - GatewayService
+            description: 获取网关信息
+            operationId: GatewayService_GetGatewayInfo
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/gateway.v1.GetUserReply'
+components:
+    schemas:
+        gateway.v1.GameAppInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gameId:
+                    type: string
+                appKey:
+                    type: string
+        gateway.v1.GetGameAppReply:
+            type: object
+            properties:
+                gameApp:
+                    $ref: '#/components/schemas/gateway.v1.GameAppInfo'
+        gateway.v1.GetUserReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                email:
+                    type: string
+            description: 查询用户响应
+        gateway.v1.ListUsersReply:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int32
+                users:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/gateway.v1.SearchUser'
+        gateway.v1.ListUsersRequest:
+            type: object
+            properties:
+                page:
+                    type: integer
+                    format: int32
+                pageSize:
+                    type: integer
+                    format: int32
+                search:
+                    $ref: '#/components/schemas/gateway.v1.SearchUser'
+        gateway.v1.LoginReply:
+            type: object
+            properties:
+                name:
+                    type: string
+                token:
+                    type: string
+        gateway.v1.LoginRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                password:
+                    type: string
+        gateway.v1.SearchUser:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                email:
+                    type: string
+        helloworld.v1.HelloReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: The response message containing the greetings
+tags:
+    - name: GatewayService
+      description: Gateway 对外提供 HTTP API 接口
+    - name: Greeter
+      description: The greeting service definition.

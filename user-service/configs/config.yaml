@@ -1,0 +1,26 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9100
+    timeout: 1s
+data:
+  database:
+    driver: mysql
+    #密码：root123
+    #数据库名：game_sdk_cn
+    #用户名：root
+    #端口：3306
+    #主机：127.0.0.1
+    source: root:root123456@tcp(127.0.0.1:3306)/game_sdk_cn?parseTime=True&loc=Local
+
+  redis:
+    addr: 127.0.0.1:6379
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+    db: 1
+auth:
+  jwt:
+    password: change-me-user-service-jwt-secret
+    expire_seconds: 86400

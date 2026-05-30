@@ -1,0 +1,15 @@
+.DS_Store
+.idea/
+
+# Build outputs
+bin/
+dist/
+tmp/
+*.test
+*.out
+
+# Go workspace vendor cache
+vendor/
+
+# Logs
+*.log

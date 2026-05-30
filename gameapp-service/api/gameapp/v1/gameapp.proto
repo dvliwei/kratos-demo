@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package gameapp.v1;
+
+option go_package = "gameapp/v1;gameappv1";
+
+service GameAppService{
+  rpc GetGameApp(GetGameAppRequest) returns (GetGameAppResponse);
+}
+
+message GetGameAppRequest{
+  uint64 id = 1;
+}
+message GameAppInfo{
+  uint64 id = 1;
+  int64 game_id = 2;
+  string app_id = 3;
+  string name= 4;
+  string app_key = 5;
+}
+message GetGameAppResponse{
+  GameAppInfo info = 1;
+}

@@ -1,0 +1,92 @@
+// Copyright 2024 The Terway Authors. All rights reserved.
+//版权说明
+syntax = "proto3";
+
+// 3. package（重要！Kratos 生成路径靠它）
+package gateway.v1;
+
+// 4. 导入 protobuf 相关的库
+import "google/api/annotations.proto";
+
+// 5. 选项（go_package、java_package 等）
+option go_package = "gateway-service/api/gateway/v1;v1";
+
+//Gateway 对外提供 HTTP API 接口
+service GatewayService {
+  // 用户邮箱密码登录
+  rpc Login(LoginRequest) returns (LoginReply) {
+    option (google.api.http) = {
+      post: "/v1/login"
+      body: "*"
+    };
+  }
+  // 获取网关信息
+  rpc GetGatewayInfo(GetUserRequest) returns (GetUserReply) {
+    option (google.api.http) = {
+      get: "/v1/users/{id}"
+    };
+  }
+  //分页查询用户列表
+  // post body json格式，参数放在请求体中
+    rpc ListUsersWithPage(ListUsersRequest) returns (ListUsersReply) {
+      option (google.api.http) = {
+        post: "/v1/users"
+        body: "*"
+      };
+    }
+
+
+  rpc GetGameApp(GetGameAppRequest) returns (GetGameAppReply) {
+    option (google.api.http) = {
+      get: "/v1/game_app/{id}"
+    };
+  }
+}
+
+message LoginRequest{
+  string email = 1; // 用户邮箱
+  string password = 2; // 用户密码
+}
+message LoginReply{
+  string name = 1; // 用户姓名
+  string token = 2; // 用户 token
+}
+message SearchUser {
+  int64 id = 1; // 用户 ID
+  string name = 2; // 用户姓名
+  string email = 3; // 用户邮箱
+}
+message ListUsersRequest{
+  int32 page = 1; // 页码
+  int32 page_size = 2; // 每页大小
+  SearchUser search = 3; // 搜索条件
+}
+
+message ListUsersReply{
+  int32 total = 1; // 用户总数
+  repeated SearchUser users = 2; // 用户列表
+}
+//查询用户请求
+message GetUserRequest {
+  int64 id = 1; // 用户 ID
+}
+//查询用户响应
+message GetUserReply {
+  int64 id = 1; // 用户 ID
+  string name = 2; // 用户姓名
+  string email = 3; // 用户邮箱
+}
+
+
+message GetGameAppRequest {
+  int64 id = 1; // 游戏应用 ID
+}
+message GameAppInfo {
+  int64 id = 1; // 游戏应用 ID
+  string name = 2; // 游戏应用名称
+  string game_id = 3; // 游戏 ID
+  string  app_key = 4; // 游戏应用 Key
+}
+message GetGameAppReply {
+  GameAppInfo game_app = 1; // 游戏应用信息
+}
