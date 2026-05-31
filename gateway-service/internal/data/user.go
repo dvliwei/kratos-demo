@@ -14,6 +14,7 @@ package data
 import (
 	"context"
 	"gateway-service/internal/biz"
+	"gateway-service/internal/conf"
 	"gateway-service/internal/pkg/requestid"
 	userv1 "user-service/api/user/v1"
 
@@ -28,9 +29,13 @@ type userRepo struct {
 	logger *log.Helper
 }
 
-func NewUserRepo(logger log.Logger) biz.UserRepo {
+func NewUserRepo(clients *conf.Clients, logger log.Logger) biz.UserRepo {
+	endpoint := "127.0.0.1:9100"
+	if clients != nil && clients.GetUser().GetEndpoint() != "" {
+		endpoint = clients.GetUser().GetEndpoint()
+	}
 	conn, err := grpc.Dial(
-		"127.0.0.1:9100",
+		endpoint,
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)

@@ -20,6 +20,7 @@ type Greeter struct {
 }
 
 // GreeterRepo is a Greater repo.
+// 问候器仓库接口，包含了保存、更新、根据ID查找、根据Hello查找、列出所有问候器的方法
 type GreeterRepo interface {
 	Save(context.Context, *Greeter) (*Greeter, error)
 	Update(context.Context, *Greeter) (*Greeter, error)

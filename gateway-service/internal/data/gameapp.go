@@ -14,6 +14,7 @@ import (
 	"context"
 	gameappv1 "gameapp-service/api/gameapp/v1"
 	"gateway-service/internal/biz"
+	"gateway-service/internal/conf"
 	"gateway-service/internal/pkg/requestid"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -31,9 +32,13 @@ type gameAppRepo struct {
 	logger *log.Helper
 }
 
-func NewGameAppRepo(logger log.Logger) biz.GameAppRepo {
+func NewGameAppRepo(clients *conf.Clients, logger log.Logger) biz.GameAppRepo {
+	endpoint := "127.0.0.1:9200"
+	if clients != nil && clients.GetGameApp().GetEndpoint() != "" {
+		endpoint = clients.GetGameApp().GetEndpoint()
+	}
 	conn, err := grpc.Dial(
-		"127.0.0.1:9200",
+		endpoint,
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)

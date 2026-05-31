@@ -14,8 +14,8 @@ data:
     read_timeout: 0.2s
     write_timeout: 0.2s
     db: 1
- # 客户端配置
-client:
+# 客户端配置
+clients:
   # 用户服务配置
   user:
     endpoint: 127.0.0.1:9100
