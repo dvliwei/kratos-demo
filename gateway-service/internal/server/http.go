@@ -16,6 +16,7 @@ import (
 // NewHTTPServer new an HTTP server.
 func NewHTTPServer(c *conf.Server, auth *conf.JWTAuthConfig, data *data.Data, greeter *service.GreeterService,
 	gateway *service.GatewayService,
+	accessLogPublisher *AccessLogPublisher,
 	logger log.Logger) *http.Server {
 	jwtManager, err := newJWTManager(auth)
 	if err != nil {
@@ -27,6 +28,7 @@ func NewHTTPServer(c *conf.Server, auth *conf.JWTAuthConfig, data *data.Data, gr
 		),
 		http.Filter(
 			requestIDFilter,
+			accessLogMiddleware(logger, accessLogPublisher),
 			authMiddleware(jwtManager, data.Redis()),
 		),
 		http.ResponseEncoder(unifiedResponseEncoder),

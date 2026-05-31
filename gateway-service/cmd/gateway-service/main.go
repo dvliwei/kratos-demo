@@ -84,7 +84,12 @@ func main() {
 		panic(err)
 	}
 
-	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Clients, &redis, &auth, logger)
+	var rabbitmq conf.RabbitMQConfig
+	if err := c.Value("rabbitmq").Scan(&rabbitmq); err != nil {
+		panic(err)
+	}
+
+	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Clients, &redis, &auth, &rabbitmq, logger)
 	if err != nil {
 		panic(err)
 	}

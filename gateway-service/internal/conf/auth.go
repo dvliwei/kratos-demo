@@ -33,3 +33,8 @@ type JWTConfig struct {
 	Password      string `json:"password"`
 	ExpireSeconds int64  `json:"expire_seconds"`
 }
+
+type RabbitMQConfig struct {
+	Addr  string `json:"addr"`
+	Topic string `json:"topic"`
+}

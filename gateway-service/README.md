@@ -1,6 +1,7 @@
 # gateway-service 网关服务
 
 `gateway-service` 是项目的对外 HTTP 网关，负责接收外部请求、统一响应格式、生成和透传 `request_id`，并通过 gRPC 调用内部的 `user-service` 和 `gameapp-service`。
+同时，网关会采集 HTTP 访问日志并异步发布到 RabbitMQ，供 `accesslog-service` 消费。
 
 ## 服务职责
 
@@ -11,6 +12,8 @@
 - 统一包装 HTTP 响应，返回 `code`、`message`、`request_id`、`server_time`、`data`。
 - 从请求头读取或生成 `X-Request-Id`。
 - 调用下游 gRPC 服务时透传 `x-request-id`。
+- 采集请求方法、路径、请求体、响应体、状态码、耗时和 `request_id`。
+- 将访问日志发布到 RabbitMQ `access_log` 队列。
 
 ## 默认端口
 
@@ -22,6 +25,7 @@
 | gRPC | `0.0.0.0:9000` |
 | user-service | `127.0.0.1:9100` |
 | gameapp-service | `127.0.0.1:9200` |
+| RabbitMQ | `127.0.0.1:5672` |
 
 下游服务地址从 [configs/config.yaml](./configs/config.yaml) 的 `clients` 节读取：
 
@@ -34,6 +38,38 @@ clients:
 ```
 
 如果配置缺失，代码会回退到本地默认地址，便于本地开发。
+
+访问日志 RabbitMQ 配置：
+
+```yaml
+rabbitmq:
+  addr: amqp://admin:admin123@127.0.0.1:5672
+  topic: access_log
+```
+
+`topic` 当前作为队列名使用。需要和 `accesslog-service` 的 `rabbitmq.queue` 保持一致。
+
+## 访问日志
+
+网关通过 HTTP filter 记录每次请求，最多保留请求体和响应体前 `4096` 字节，然后异步写入 RabbitMQ。
+
+消息体是 JSON，核心字段包括：
+
+```json
+{
+  "method": "POST",
+  "path": "/v1/users",
+  "query": "",
+  "request_id": "demo-request-id",
+  "status": 200,
+  "cost_ms": 12,
+  "request_body": "{}",
+  "response_body": "{}",
+  "created_at": "2026-06-01T01:51:34+08:00"
+}
+```
+
+如果 RabbitMQ 不可用，网关启动时会返回错误；本地联调请先启动 `rabbitmq` 目录下的 Docker Compose。
 
 ## 接口列表
 
@@ -129,6 +165,11 @@ curl http://127.0.0.1:8080/v1/user_game_app_stats
 请先启动下游服务：
 
 ```bash
+cd ../rabbitmq
+./start-rabbitmq.sh
+```
+
+```bash
 cd ../user-service
 go run ./cmd/user-service -conf ./configs
 ```
@@ -183,4 +224,5 @@ gateway-service/
 - 游戏应用分页查询由网关转发到 `gameapp-service.ListGameAppsWithPage`。
 - 聚合统计接口会分别调用 `user-service.GetUserTotal` 和 `gameapp-service.CountGameApps`。
 - 下游服务地址从 `configs/config.yaml` 的 `clients` 节读取，修改端口或远程地址时优先改配置。
+- RabbitMQ 队列名必须和 `accesslog-service` 保持一致，当前为 `access_log`。
 - 如果 HTTP 返回 `method xxx not implemented`，通常是 proto 已生成路由，但 `internal/service` 中没有实现对应方法。

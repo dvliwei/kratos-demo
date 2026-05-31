@@ -23,9 +23,14 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, confClients *conf.Clients, confRedis *conf.RedisConfig, confAuth *conf.JWTAuthConfig, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(confServer *conf.Server, confData *conf.Data, confClients *conf.Clients, confRedis *conf.RedisConfig, confAuth *conf.JWTAuthConfig, confRabbitMQ *conf.RabbitMQConfig, logger log.Logger) (*kratos.App, func(), error) {
 	dataData, cleanup, err := data.NewData(confData, confRedis)
 	if err != nil {
+		return nil, nil, err
+	}
+	accessLogPublisher, cleanup2, err := server.NewAccessLogPublisher(confRabbitMQ, logger)
+	if err != nil {
+		cleanup()
 		return nil, nil, err
 	}
 	greeterRepo := data.NewGreeterRepo(dataData, logger)
@@ -37,9 +42,10 @@ func wireApp(confServer *conf.Server, confData *conf.Data, confClients *conf.Cli
 	gameAppRepo := data.NewGameAppRepo(confClients, logger)
 	gameAppUseCase := biz.NewGameAppUseCase(gameAppRepo)
 	gatewayService := service.NewGatewayService(userUseCase, gameAppUseCase)
-	httpServer := server.NewHTTPServer(confServer, confAuth, dataData, greeterService, gatewayService, logger)
+	httpServer := server.NewHTTPServer(confServer, confAuth, dataData, greeterService, gatewayService, accessLogPublisher, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
+		cleanup2()
 		cleanup()
 	}, nil
 }

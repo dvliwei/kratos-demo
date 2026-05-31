@@ -1,6 +1,6 @@
 # Kratos Demo 微服务项目
 
-这是一个基于 Go Kratos 的多服务示例项目，当前包含网关服务、用户服务和游戏应用服务。项目通过 `go.work` 管理多个 Go module，适合用来练习 Kratos 的 HTTP/gRPC、服务分层、网关聚合、统一响应、JWT 登录、分页筛选和数据库访问。
+这是一个基于 Go Kratos 的多服务示例项目，当前包含网关服务、用户服务、游戏应用服务和访问日志消费服务。项目通过 `go.work` 管理多个 Go module，适合用来练习 Kratos 的 HTTP/gRPC、服务分层、网关聚合、统一响应、JWT 登录、分页筛选、数据库访问和 RabbitMQ 异步日志消费。
 
 ## 项目结构
 
@@ -9,6 +9,8 @@ kratos-demo/
 ├── gateway-service/   # 对外 HTTP 网关，聚合 user-service 与 gameapp-service
 ├── user-service/      # 用户服务，提供登录、用户查询、分页查询
 ├── gameapp-service/   # 游戏应用服务，提供游戏应用查询
+├── accesslog-service/ # RabbitMQ 访问日志消费者，当前消费后打印日志
+├── rabbitmq/          # 本地 RabbitMQ Docker Compose 和启动脚本
 ├── vendor/            # 依赖缓存
 ├── go.work            # 多模块工作区
 └── README.md          # 项目总说明
@@ -21,6 +23,7 @@ kratos-demo/
 | gateway-service | `:8080` | `:9000` | 对外统一入口，负责 HTTP 路由、统一响应包装、request_id 生成与透传 |
 | user-service | `:8000` | `:9100` | 用户登录、用户详情、用户分页查询、用户总数统计 |
 | gameapp-service | `:8088` | `:9200` | 游戏应用详情、分页查询、应用总数统计 |
+| accesslog-service | `:8003` | `:9300` | 消费 RabbitMQ `access_log` 队列，当前收到后打印并确认消息 |
 
 ## 调用关系
 
@@ -32,9 +35,10 @@ kratos-demo/
 gateway-service
   |-- gRPC --> user-service
   |-- gRPC --> gameapp-service
+  |-- RabbitMQ(access_log) --> accesslog-service
 ```
 
-`gateway-service` 是推荐的外部访问入口。内部微服务主要通过 gRPC 被网关调用。
+`gateway-service` 是推荐的外部访问入口。内部业务微服务主要通过 gRPC 被网关调用；访问日志通过 RabbitMQ 异步发送到 `accesslog-service`。
 
 ## 统一响应格式
 
@@ -107,6 +111,11 @@ curl http://127.0.0.1:8080/v1/user_game_app_stats
 建议按依赖顺序启动：
 
 ```bash
+cd rabbitmq
+./start-rabbitmq.sh
+```
+
+```bash
 cd user-service
 go run ./cmd/user-service -conf ./configs
 ```
@@ -119,6 +128,11 @@ go run ./cmd/gameapp-service -conf ./configs
 ```bash
 cd gateway-service
 go run ./cmd/gateway-service -conf ./configs
+```
+
+```bash
+cd accesslog-service
+go run ./cmd/accesslog-service -conf ./configs
 ```
 
 ## 配置说明
@@ -149,6 +163,25 @@ clients:
     endpoint: 127.0.0.1:9100
   game_app:
     endpoint: 127.0.0.1:9200
+```
+
+`gateway-service` 通过 `rabbitmq` 配置发布访问日志：
+
+```yaml
+rabbitmq:
+  addr: amqp://admin:admin123@127.0.0.1:5672
+  topic: access_log
+```
+
+`accesslog-service` 通过 `rabbitmq` 配置消费同一个队列：
+
+```yaml
+rabbitmq:
+  url: amqp://admin:admin123@127.0.0.1:5672/
+  queue: access_log
+  consumer_tag: accesslog-service
+  auto_ack: false
+  prefetch_count: 1
 ```
 
 `user-service` 额外包含 JWT 配置：
@@ -215,6 +248,7 @@ git switch develop
 
 - 当前项目使用 `go.work` 管理多个服务模块。
 - `gateway-service` 是外部 HTTP 的统一入口，业务微服务不建议直接暴露给前端。
+- RabbitMQ 队列名必须保持一致：`gateway-service.rabbitmq.topic` 和 `accesslog-service.rabbitmq.queue` 当前都为 `access_log`。
 - 修改 `.proto` 后需要重新执行对应服务的 `make api` 或 `make config`。
 - 如果 `make config` 报 `protoc` 动态库缺失，需要先修复本机 Protobuf 安装环境。
 - `gameapp-service` 当前通过 GORM 查询 `tab_game_app` 表。

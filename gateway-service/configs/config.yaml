@@ -25,3 +25,6 @@ auth:
   jwt:
     password: change-me-user-service-jwt-secret
     expire_seconds: 86400
+rabbitmq:
+  addr: amqp://admin:admin123@127.0.0.1:5672
+  topic: access_log

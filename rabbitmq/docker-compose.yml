@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    volumes:
+      # ✅ 只挂数据目录（安全）
+      - /Volumes/HIKSEMI/mq/rabbitmq/mnesia:/var/lib/rabbitmq/mnesia
+      - /Volumes/HIKSEMI/mq/rabbitmq/log:/var/log/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

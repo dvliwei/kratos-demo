@@ -1,6 +1,7 @@
 go 1.26.1
 
 use (
+	./accesslog-service
 	./gameapp-service
 	./gateway-service
 	./user-service
