@@ -23,6 +23,18 @@
 | user-service | `127.0.0.1:9100` |
 | gameapp-service | `127.0.0.1:9200` |
 
+下游服务地址从 [configs/config.yaml](./configs/config.yaml) 的 `clients` 节读取：
+
+```yaml
+clients:
+  user:
+    endpoint: 127.0.0.1:9100
+  game_app:
+    endpoint: 127.0.0.1:9200
+```
+
+如果配置缺失，代码会回退到本地默认地址，便于本地开发。
+
 ## 接口列表
 
 | 方法 | 路径 | 说明 |
@@ -170,5 +182,5 @@ gateway-service/
 - 如果新增网关接口，需要同时补齐 proto、service、biz、data 调用链。
 - 游戏应用分页查询由网关转发到 `gameapp-service.ListGameAppsWithPage`。
 - 聚合统计接口会分别调用 `user-service.GetUserTotal` 和 `gameapp-service.CountGameApps`。
-- 当前下游服务地址在 `internal/data` 中存在硬编码调用点，后续建议统一迁移到 `configs/config.yaml` 的 client 配置。
+- 下游服务地址从 `configs/config.yaml` 的 `clients` 节读取，修改端口或远程地址时优先改配置。
 - 如果 HTTP 返回 `method xxx not implemented`，通常是 proto 已生成路由，但 `internal/service` 中没有实现对应方法。

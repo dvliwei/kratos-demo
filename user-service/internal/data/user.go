@@ -189,3 +189,11 @@ func (r *userRepo) GetUserCount(ctx context.Context) (uint64, error) {
 	}
 	return uint64(count), nil
 }
+
+func (r *userRepo) UpdateUserName(ctx context.Context, id uint64, name string) (uint64, string, error) {
+	result := r.db.WithContext(ctx).Model(&userModel{}).Where("id = ?", id).Update("name", name)
+	if result.Error != nil {
+		return 0, "", result.Error
+	}
+	return id, name, nil
+}

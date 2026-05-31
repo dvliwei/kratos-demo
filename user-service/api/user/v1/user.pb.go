@@ -494,6 +494,110 @@ func (*GetUserTotalRequest) Descriptor() ([]byte, []int) {
 	return file_user_v1_user_proto_rawDescGZIP(), []int{8}
 }
 
+type UpdateUserNameRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`    // 用户ID
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // 新用户名
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserNameRequest) Reset() {
+	*x = UpdateUserNameRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserNameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserNameRequest) ProtoMessage() {}
+
+func (x *UpdateUserNameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserNameRequest.ProtoReflect.Descriptor instead.
+func (*UpdateUserNameRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *UpdateUserNameRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateUserNameRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type UpdateUserNameReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`    // 用户ID
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // 更新后的用户名
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserNameReply) Reset() {
+	*x = UpdateUserNameReply{}
+	mi := &file_user_v1_user_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserNameReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserNameReply) ProtoMessage() {}
+
+func (x *UpdateUserNameReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserNameReply.ProtoReflect.Descriptor instead.
+func (*UpdateUserNameReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UpdateUserNameReply) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateUserNameReply) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
@@ -526,12 +630,19 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x05users\x18\x02 \x03(\v2\x13.user.v1.SearchUserR\x05users\")\n" +
 	"\x11GetUserTotalReply\x12\x14\n" +
 	"\x05total\x18\x01 \x01(\x04R\x05total\"\x15\n" +
-	"\x13GetUserTotalRequest2\x89\x02\n" +
+	"\x13GetUserTotalRequest\";\n" +
+	"\x15UpdateUserNameRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"9\n" +
+	"\x13UpdateUserNameReply\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name2\xd9\x02\n" +
 	"\x04User\x123\n" +
 	"\x05Login\x12\x15.user.v1.LoginRequest\x1a\x13.user.v1.LoginReply\x129\n" +
 	"\aGetUser\x12\x17.user.v1.GetUserRequest\x1a\x15.user.v1.GetUserReply\x12G\n" +
 	"\x11ListUsersWithPage\x12\x19.user.v1.ListUsersRequest\x1a\x17.user.v1.ListUsersReply\x12H\n" +
-	"\fGetUserTotal\x12\x1c.user.v1.GetUserTotalRequest\x1a\x1a.user.v1.GetUserTotalReplyB\x1dZ\x1buser-service/api/user/v1;v1b\x06proto3"
+	"\fGetUserTotal\x12\x1c.user.v1.GetUserTotalRequest\x1a\x1a.user.v1.GetUserTotalReply\x12N\n" +
+	"\x0eUpdateUserName\x12\x1e.user.v1.UpdateUserNameRequest\x1a\x1c.user.v1.UpdateUserNameReplyB\x1dZ\x1buser-service/api/user/v1;v1b\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once
@@ -545,34 +656,38 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_user_v1_user_proto_goTypes = []any{
-	(*LoginRequest)(nil),        // 0: user.v1.LoginRequest
-	(*LoginReply)(nil),          // 1: user.v1.LoginReply
-	(*GetUserRequest)(nil),      // 2: user.v1.GetUserRequest
-	(*GetUserReply)(nil),        // 3: user.v1.GetUserReply
-	(*SearchUser)(nil),          // 4: user.v1.SearchUser
-	(*ListUsersRequest)(nil),    // 5: user.v1.ListUsersRequest
-	(*ListUsersReply)(nil),      // 6: user.v1.ListUsersReply
-	(*GetUserTotalReply)(nil),   // 7: user.v1.GetUserTotalReply
-	(*GetUserTotalRequest)(nil), // 8: user.v1.GetUserTotalRequest
+	(*LoginRequest)(nil),          // 0: user.v1.LoginRequest
+	(*LoginReply)(nil),            // 1: user.v1.LoginReply
+	(*GetUserRequest)(nil),        // 2: user.v1.GetUserRequest
+	(*GetUserReply)(nil),          // 3: user.v1.GetUserReply
+	(*SearchUser)(nil),            // 4: user.v1.SearchUser
+	(*ListUsersRequest)(nil),      // 5: user.v1.ListUsersRequest
+	(*ListUsersReply)(nil),        // 6: user.v1.ListUsersReply
+	(*GetUserTotalReply)(nil),     // 7: user.v1.GetUserTotalReply
+	(*GetUserTotalRequest)(nil),   // 8: user.v1.GetUserTotalRequest
+	(*UpdateUserNameRequest)(nil), // 9: user.v1.UpdateUserNameRequest
+	(*UpdateUserNameReply)(nil),   // 10: user.v1.UpdateUserNameReply
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	4, // 0: user.v1.ListUsersRequest.search:type_name -> user.v1.SearchUser
-	4, // 1: user.v1.ListUsersReply.users:type_name -> user.v1.SearchUser
-	0, // 2: user.v1.User.Login:input_type -> user.v1.LoginRequest
-	2, // 3: user.v1.User.GetUser:input_type -> user.v1.GetUserRequest
-	5, // 4: user.v1.User.ListUsersWithPage:input_type -> user.v1.ListUsersRequest
-	8, // 5: user.v1.User.GetUserTotal:input_type -> user.v1.GetUserTotalRequest
-	1, // 6: user.v1.User.Login:output_type -> user.v1.LoginReply
-	3, // 7: user.v1.User.GetUser:output_type -> user.v1.GetUserReply
-	6, // 8: user.v1.User.ListUsersWithPage:output_type -> user.v1.ListUsersReply
-	7, // 9: user.v1.User.GetUserTotal:output_type -> user.v1.GetUserTotalReply
-	6, // [6:10] is the sub-list for method output_type
-	2, // [2:6] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	4,  // 0: user.v1.ListUsersRequest.search:type_name -> user.v1.SearchUser
+	4,  // 1: user.v1.ListUsersReply.users:type_name -> user.v1.SearchUser
+	0,  // 2: user.v1.User.Login:input_type -> user.v1.LoginRequest
+	2,  // 3: user.v1.User.GetUser:input_type -> user.v1.GetUserRequest
+	5,  // 4: user.v1.User.ListUsersWithPage:input_type -> user.v1.ListUsersRequest
+	8,  // 5: user.v1.User.GetUserTotal:input_type -> user.v1.GetUserTotalRequest
+	9,  // 6: user.v1.User.UpdateUserName:input_type -> user.v1.UpdateUserNameRequest
+	1,  // 7: user.v1.User.Login:output_type -> user.v1.LoginReply
+	3,  // 8: user.v1.User.GetUser:output_type -> user.v1.GetUserReply
+	6,  // 9: user.v1.User.ListUsersWithPage:output_type -> user.v1.ListUsersReply
+	7,  // 10: user.v1.User.GetUserTotal:output_type -> user.v1.GetUserTotalReply
+	10, // 11: user.v1.User.UpdateUserName:output_type -> user.v1.UpdateUserNameReply
+	7,  // [7:12] is the sub-list for method output_type
+	2,  // [2:7] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_proto_init() }
@@ -586,7 +701,7 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -25,6 +25,7 @@ const OperationGatewayServiceGetUserGameAppStats = "/gateway.v1.GatewayService/G
 const OperationGatewayServiceListGameAppsWithPage = "/gateway.v1.GatewayService/ListGameAppsWithPage"
 const OperationGatewayServiceListUsersWithPage = "/gateway.v1.GatewayService/ListUsersWithPage"
 const OperationGatewayServiceLogin = "/gateway.v1.GatewayService/Login"
+const OperationGatewayServiceUpdateUserName = "/gateway.v1.GatewayService/UpdateUserName"
 
 type GatewayServiceHTTPServer interface {
 	GetGameApp(context.Context, *GetGameAppRequest) (*GetGameAppReply, error)
@@ -39,6 +40,8 @@ type GatewayServiceHTTPServer interface {
 	ListUsersWithPage(context.Context, *ListUsersRequest) (*ListUsersReply, error)
 	// Login 用户邮箱密码登录
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
+	// UpdateUserName修改用户名称
+	UpdateUserName(context.Context, *UpdateUserNameRequest) (*UpdateUserNameReply, error)
 }
 
 func RegisterGatewayServiceHTTPServer(s *http.Server, srv GatewayServiceHTTPServer) {
@@ -49,6 +52,7 @@ func RegisterGatewayServiceHTTPServer(s *http.Server, srv GatewayServiceHTTPServ
 	r.GET("/v1/game_app/{id}", _GatewayService_GetGameApp0_HTTP_Handler(srv))
 	r.POST("/v1/game_apps", _GatewayService_ListGameAppsWithPage0_HTTP_Handler(srv))
 	r.GET("/v1/user_game_app_stats", _GatewayService_GetUserGameAppStats0_HTTP_Handler(srv))
+	r.PUT("/v1/users/{id}/name", _GatewayService_UpdateUserName0_HTTP_Handler(srv))
 }
 
 func _GatewayService_Login0_HTTP_Handler(srv GatewayServiceHTTPServer) func(ctx http.Context) error {
@@ -180,6 +184,31 @@ func _GatewayService_GetUserGameAppStats0_HTTP_Handler(srv GatewayServiceHTTPSer
 	}
 }
 
+func _GatewayService_UpdateUserName0_HTTP_Handler(srv GatewayServiceHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateUserNameRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationGatewayServiceUpdateUserName)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateUserName(ctx, req.(*UpdateUserNameRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateUserNameReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type GatewayServiceHTTPClient interface {
 	GetGameApp(ctx context.Context, req *GetGameAppRequest, opts ...http.CallOption) (rsp *GetGameAppReply, err error)
 	// GetGatewayInfo 获取网关信息
@@ -193,6 +222,8 @@ type GatewayServiceHTTPClient interface {
 	ListUsersWithPage(ctx context.Context, req *ListUsersRequest, opts ...http.CallOption) (rsp *ListUsersReply, err error)
 	// Login 用户邮箱密码登录
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
+	// UpdateUserName修改用户名称
+	UpdateUserName(ctx context.Context, req *UpdateUserNameRequest, opts ...http.CallOption) (rsp *UpdateUserNameReply, err error)
 }
 
 type GatewayServiceHTTPClientImpl struct {
@@ -281,6 +312,20 @@ func (c *GatewayServiceHTTPClientImpl) Login(ctx context.Context, in *LoginReque
 	opts = append(opts, http.Operation(OperationGatewayServiceLogin))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UpdateUserName修改用户名称
+func (c *GatewayServiceHTTPClientImpl) UpdateUserName(ctx context.Context, in *UpdateUserNameRequest, opts ...http.CallOption) (*UpdateUserNameReply, error) {
+	var out UpdateUserNameReply
+	pattern := "/v1/users/{id}/name"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationGatewayServiceUpdateUserName))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

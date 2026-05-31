@@ -896,6 +896,110 @@ func (x *ListGameAppsReply) GetTotal() uint64 {
 	return 0
 }
 
+type UpdateUserNameRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`    // 用户 ID
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // 新的用户姓名
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserNameRequest) Reset() {
+	*x = UpdateUserNameRequest{}
+	mi := &file_gateway_v1_gateway_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserNameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserNameRequest) ProtoMessage() {}
+
+func (x *UpdateUserNameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_gateway_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserNameRequest.ProtoReflect.Descriptor instead.
+func (*UpdateUserNameRequest) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *UpdateUserNameRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateUserNameRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type UpdateUserNameReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`    // 用户 ID
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // 更新后的用户姓名
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserNameReply) Reset() {
+	*x = UpdateUserNameReply{}
+	mi := &file_gateway_v1_gateway_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserNameReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserNameReply) ProtoMessage() {}
+
+func (x *UpdateUserNameReply) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_gateway_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserNameReply.ProtoReflect.Descriptor instead.
+func (*UpdateUserNameReply) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *UpdateUserNameReply) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateUserNameReply) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 var File_gateway_v1_gateway_proto protoreflect.FileDescriptor
 
 const file_gateway_v1_gateway_proto_rawDesc = "" +
@@ -958,7 +1062,13 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\aapp_key\x18\x05 \x01(\tR\x06appKey\"Z\n" +
 	"\x11ListGameAppsReply\x12/\n" +
 	"\x05infos\x18\x01 \x03(\v2\x19.gateway.v1.GameAppInfoV2R\x05infos\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total2\x84\x05\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\";\n" +
+	"\x15UpdateUserNameRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"9\n" +
+	"\x13UpdateUserNameReply\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name2\xfa\x05\n" +
 	"\x0eGatewayService\x12O\n" +
 	"\x05Login\x12\x18.gateway.v1.LoginRequest\x1a\x16.gateway.v1.LoginReply\"\x14\x82\xd3\xe4\x93\x02\x0e:\x01*\"\t/v1/login\x12^\n" +
 	"\x0eGetGatewayInfo\x12\x1a.gateway.v1.GetUserRequest\x1a\x18.gateway.v1.GetUserReply\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/users/{id}\x12c\n" +
@@ -966,7 +1076,8 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\n" +
 	"GetGameApp\x12\x1d.gateway.v1.GetGameAppRequest\x1a\x1b.gateway.v1.GetGameAppReply\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/v1/game_app/{id}\x12p\n" +
 	"\x14ListGameAppsWithPage\x12\x1f.gateway.v1.ListGameAppsRequest\x1a\x1d.gateway.v1.ListGameAppsReply\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/game_apps\x12\x84\x01\n" +
-	"\x13GetUserGameAppStats\x12&.gateway.v1.GetUserGameAppStatsRequest\x1a$.gateway.v1.GetUserGameAppStatsReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/v1/user_game_app_statsB#Z!gateway-service/api/gateway/v1;v1b\x06proto3"
+	"\x13GetUserGameAppStats\x12&.gateway.v1.GetUserGameAppStatsRequest\x1a$.gateway.v1.GetUserGameAppStatsReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/v1/user_game_app_stats\x12t\n" +
+	"\x0eUpdateUserName\x12!.gateway.v1.UpdateUserNameRequest\x1a\x1f.gateway.v1.UpdateUserNameReply\"\x1e\x82\xd3\xe4\x93\x02\x18:\x01*\x1a\x13/v1/users/{id}/nameB#Z!gateway-service/api/gateway/v1;v1b\x06proto3"
 
 var (
 	file_gateway_v1_gateway_proto_rawDescOnce sync.Once
@@ -980,7 +1091,7 @@ func file_gateway_v1_gateway_proto_rawDescGZIP() []byte {
 	return file_gateway_v1_gateway_proto_rawDescData
 }
 
-var file_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_gateway_v1_gateway_proto_goTypes = []any{
 	(*LoginRequest)(nil),               // 0: gateway.v1.LoginRequest
 	(*LoginReply)(nil),                 // 1: gateway.v1.LoginReply
@@ -998,6 +1109,8 @@ var file_gateway_v1_gateway_proto_goTypes = []any{
 	(*ListGameAppsRequest)(nil),        // 13: gateway.v1.ListGameAppsRequest
 	(*GameAppInfoV2)(nil),              // 14: gateway.v1.GameAppInfoV2
 	(*ListGameAppsReply)(nil),          // 15: gateway.v1.ListGameAppsReply
+	(*UpdateUserNameRequest)(nil),      // 16: gateway.v1.UpdateUserNameRequest
+	(*UpdateUserNameReply)(nil),        // 17: gateway.v1.UpdateUserNameReply
 }
 var file_gateway_v1_gateway_proto_depIdxs = []int32{
 	2,  // 0: gateway.v1.ListUsersRequest.search:type_name -> gateway.v1.SearchUser
@@ -1011,14 +1124,16 @@ var file_gateway_v1_gateway_proto_depIdxs = []int32{
 	7,  // 8: gateway.v1.GatewayService.GetGameApp:input_type -> gateway.v1.GetGameAppRequest
 	13, // 9: gateway.v1.GatewayService.ListGameAppsWithPage:input_type -> gateway.v1.ListGameAppsRequest
 	10, // 10: gateway.v1.GatewayService.GetUserGameAppStats:input_type -> gateway.v1.GetUserGameAppStatsRequest
-	1,  // 11: gateway.v1.GatewayService.Login:output_type -> gateway.v1.LoginReply
-	6,  // 12: gateway.v1.GatewayService.GetGatewayInfo:output_type -> gateway.v1.GetUserReply
-	4,  // 13: gateway.v1.GatewayService.ListUsersWithPage:output_type -> gateway.v1.ListUsersReply
-	9,  // 14: gateway.v1.GatewayService.GetGameApp:output_type -> gateway.v1.GetGameAppReply
-	15, // 15: gateway.v1.GatewayService.ListGameAppsWithPage:output_type -> gateway.v1.ListGameAppsReply
-	11, // 16: gateway.v1.GatewayService.GetUserGameAppStats:output_type -> gateway.v1.GetUserGameAppStatsReply
-	11, // [11:17] is the sub-list for method output_type
-	5,  // [5:11] is the sub-list for method input_type
+	16, // 11: gateway.v1.GatewayService.UpdateUserName:input_type -> gateway.v1.UpdateUserNameRequest
+	1,  // 12: gateway.v1.GatewayService.Login:output_type -> gateway.v1.LoginReply
+	6,  // 13: gateway.v1.GatewayService.GetGatewayInfo:output_type -> gateway.v1.GetUserReply
+	4,  // 14: gateway.v1.GatewayService.ListUsersWithPage:output_type -> gateway.v1.ListUsersReply
+	9,  // 15: gateway.v1.GatewayService.GetGameApp:output_type -> gateway.v1.GetGameAppReply
+	15, // 16: gateway.v1.GatewayService.ListGameAppsWithPage:output_type -> gateway.v1.ListGameAppsReply
+	11, // 17: gateway.v1.GatewayService.GetUserGameAppStats:output_type -> gateway.v1.GetUserGameAppStatsReply
+	17, // 18: gateway.v1.GatewayService.UpdateUserName:output_type -> gateway.v1.UpdateUserNameReply
+	12, // [12:19] is the sub-list for method output_type
+	5,  // [5:12] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
 	5,  // [5:5] is the sub-list for extension extendee
 	0,  // [0:5] is the sub-list for field type_name
@@ -1036,7 +1151,7 @@ func file_gateway_v1_gateway_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gateway_v1_gateway_proto_rawDesc), len(file_gateway_v1_gateway_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

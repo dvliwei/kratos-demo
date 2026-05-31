@@ -149,3 +149,14 @@ func gameAppsSearchTypeOS(search *v1.GameAppsSearch) *int32 {
 	typeOS := search.GetTypeOs()
 	return &typeOS
 }
+
+func (a *GatewayService) UpdateUserName(ctx context.Context, req *v1.UpdateUserNameRequest) (*v1.UpdateUserNameReply, error) {
+	id, name, err := a.uc.UpdateUserName(ctx, req.GetId(), req.GetName())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.UpdateUserNameReply{
+		Id:   int64(id),
+		Name: name,
+	}, nil
+}

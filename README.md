@@ -141,6 +141,16 @@ data:
     source: root:root123456@tcp(127.0.0.1:3306)/game_sdk_cn?parseTime=True&loc=Local
 ```
 
+`gateway-service` 通过 `clients` 配置读取下游 gRPC 地址：
+
+```yaml
+clients:
+  user:
+    endpoint: 127.0.0.1:9100
+  game_app:
+    endpoint: 127.0.0.1:9200
+```
+
 `user-service` 额外包含 JWT 配置：
 
 ```yaml
@@ -184,6 +194,23 @@ make config
 go generate ./...
 ```
 
+## 分支约定
+
+- `main`：稳定分支，用于保存已经验证通过的代码。
+- `develop`：本地日常开发分支，后续功能开发、调试和接口联调优先在该分支进行。
+
+首次创建本地开发分支：
+
+```bash
+git switch -c develop
+```
+
+已有 `develop` 后切换：
+
+```bash
+git switch develop
+```
+
 ## 注意事项
 
 - 当前项目使用 `go.work` 管理多个服务模块。
@@ -191,4 +218,4 @@ go generate ./...
 - 修改 `.proto` 后需要重新执行对应服务的 `make api` 或 `make config`。
 - 如果 `make config` 报 `protoc` 动态库缺失，需要先修复本机 Protobuf 安装环境。
 - `gameapp-service` 当前通过 GORM 查询 `tab_game_app` 表。
-- `gateway-service` 的下游 gRPC 地址当前在代码中仍有硬编码调用点，后续可统一改为读取 `configs/config.yaml` 的 client 配置。
+- `gateway-service` 的下游 gRPC 地址从 `configs/config.yaml` 的 `clients` 配置读取，默认回退到本地端口。

@@ -134,6 +134,31 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/gateway.v1.GetUserReply'
+    /v1/users/{id}/name:
+        put:
+            tags:
+                - GatewayService
+            description: 修改用户名称
+            operationId: GatewayService_UpdateUserName
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/gateway.v1.UpdateUserNameRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/gateway.v1.UpdateUserNameReply'
 components:
     schemas:
         gateway.v1.GameAppInfo:
@@ -257,6 +282,20 @@ components:
                 name:
                     type: string
                 email:
+                    type: string
+        gateway.v1.UpdateUserNameReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+        gateway.v1.UpdateUserNameRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
                     type: string
         helloworld.v1.HelloReply:
             type: object

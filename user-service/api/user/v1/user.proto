@@ -19,6 +19,9 @@ service User {
 
   //查询用户总数
   rpc GetUserTotal (GetUserTotalRequest) returns (GetUserTotalReply);
+
+  //修改用户名称
+  rpc UpdateUserName (UpdateUserNameRequest) returns (UpdateUserNameReply);
 }
 
 // 请求参数
@@ -68,3 +71,13 @@ message GetUserTotalRequest {
   // 无需参数
 }
 
+
+message UpdateUserNameRequest {
+  uint64 id = 1; // 用户ID
+  string name = 2; // 新用户名
+}
+
+message UpdateUserNameReply {
+  uint64 id = 1; // 用户ID
+  string name = 2; // 更新后的用户名
+}

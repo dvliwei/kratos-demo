@@ -54,6 +54,13 @@ service GatewayService {
       get: "/v1/user_game_app_stats"
     };
   }
+  //修改用户名称
+    rpc UpdateUserName(UpdateUserNameRequest) returns (UpdateUserNameReply) {
+      option (google.api.http) = {
+        put: "/v1/users/{id}/name"
+        body: "*"
+      };
+    }
 }
 
 message LoginRequest{
@@ -135,4 +142,13 @@ message  ListGameAppsReply{
   //repeated 表示一个字段可以有多个值，类似于数组或列表
   repeated GameAppInfoV2 infos = 1;
   uint64 total = 2; // 总记录数
+}
+
+message UpdateUserNameRequest {
+  int64 id = 1; // 用户 ID
+  string name = 2; // 新的用户姓名
+}
+message UpdateUserNameReply {
+  int64 id = 1; // 用户 ID
+  string name = 2; // 更新后的用户姓名
 }

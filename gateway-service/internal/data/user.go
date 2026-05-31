@@ -117,3 +117,15 @@ func (r *userRepo) GetUserCount(ctx context.Context) (uint64, error) {
 	}
 	return resp.Total, nil
 }
+
+func (r *userRepo) UpdateUserName(ctx context.Context, id int64, name string) (uint64, string, error) {
+	ctx = withRequestID(ctx)
+	resp, err := r.client.UpdateUserName(ctx, &userv1.UpdateUserNameRequest{
+		Id:   uint64(id),
+		Name: name,
+	})
+	if err != nil {
+		return 0, "", err
+	}
+	return resp.Id, resp.Name, nil
+}

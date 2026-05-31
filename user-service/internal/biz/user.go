@@ -19,6 +19,7 @@ type UserRepo interface {
 	FindByID(context.Context, uint64) (*User, error)
 	ListUsersWithPage(context.Context, int, int, *SearchUser) ([]*User, int64, error)
 	GetUserCount(context.Context) (uint64, error)
+	UpdateUserName(context.Context, uint64, string) (uint64, string, error)
 }
 
 // UserUsecase 包含用户业务规则，定义了用户相关操作的业务逻辑。
@@ -69,4 +70,11 @@ func (uc *UserUsecase) ListUsersWithPage(ctx context.Context, page, pageSize int
 
 func (uc *UserUsecase) GetUserCount(ctx context.Context) (uint64, error) {
 	return uc.repo.GetUserCount(ctx)
+}
+
+func (uc *UserUsecase) UpdateUserName(ctx context.Context, id uint64, name string) (uint64, string, error) {
+	if id == 0 || name == "" {
+		return 0, "", errors.BadRequest("USER_ID_INVALID", "user id or name is required")
+	}
+	return uc.repo.UpdateUserName(ctx, id, name)
 }

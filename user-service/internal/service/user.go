@@ -84,3 +84,14 @@ func (s *UserService) GetUserTotal(ctx context.Context, in *v1.GetUserTotalReque
 		Total: uint64(total),
 	}, nil
 }
+
+func (s *UserService) UpdateUserName(ctx context.Context, in *v1.UpdateUserNameRequest) (*v1.UpdateUserNameReply, error) {
+	id, name, err := s.uc.UpdateUserName(ctx, in.GetId(), in.GetName())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.UpdateUserNameReply{
+		Id:   id,
+		Name: name,
+	}, nil
+}

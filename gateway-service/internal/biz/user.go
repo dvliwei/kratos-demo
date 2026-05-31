@@ -33,6 +33,7 @@ type UserRepo interface {
 	ListUsersWithPage(ctx context.Context, page, pageSize int, search *SearchUser) ([]*User, int64, error)
 	Login(ctx context.Context, email string, password string) (*string, *string, error)
 	GetUserCount(ctx context.Context) (uint64, error)
+	UpdateUserName(ctx context.Context, id int64, name string) (uint64, string, error)
 }
 type UserUseCase struct {
 	repo UserRepo
@@ -70,4 +71,12 @@ func (a *UserUseCase) Login(ctx context.Context, email string, password string) 
 
 func (a *UserUseCase) GetUserCount(ctx context.Context) (uint64, error) {
 	return a.repo.GetUserCount(ctx)
+}
+
+// UpdateUserName 更新用户姓名
+func (a *UserUseCase) UpdateUserName(ctx context.Context, id int64, name string) (uint64, string, error) {
+	if id <= 0 || name == "" {
+		return 0, "", errors.BadRequest("USER_ID_INVALID", "user id or name is required")
+	}
+	return a.repo.UpdateUserName(ctx, id, name)
 }

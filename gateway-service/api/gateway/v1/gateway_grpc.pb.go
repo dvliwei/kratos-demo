@@ -30,6 +30,7 @@ const (
 	GatewayService_GetGameApp_FullMethodName           = "/gateway.v1.GatewayService/GetGameApp"
 	GatewayService_ListGameAppsWithPage_FullMethodName = "/gateway.v1.GatewayService/ListGameAppsWithPage"
 	GatewayService_GetUserGameAppStats_FullMethodName  = "/gateway.v1.GatewayService/GetUserGameAppStats"
+	GatewayService_UpdateUserName_FullMethodName       = "/gateway.v1.GatewayService/UpdateUserName"
 )
 
 // GatewayServiceClient is the client API for GatewayService service.
@@ -50,6 +51,8 @@ type GatewayServiceClient interface {
 	ListGameAppsWithPage(ctx context.Context, in *ListGameAppsRequest, opts ...grpc.CallOption) (*ListGameAppsReply, error)
 	// 用户和游戏统计接口
 	GetUserGameAppStats(ctx context.Context, in *GetUserGameAppStatsRequest, opts ...grpc.CallOption) (*GetUserGameAppStatsReply, error)
+	// 修改用户名称
+	UpdateUserName(ctx context.Context, in *UpdateUserNameRequest, opts ...grpc.CallOption) (*UpdateUserNameReply, error)
 }
 
 type gatewayServiceClient struct {
@@ -120,6 +123,16 @@ func (c *gatewayServiceClient) GetUserGameAppStats(ctx context.Context, in *GetU
 	return out, nil
 }
 
+func (c *gatewayServiceClient) UpdateUserName(ctx context.Context, in *UpdateUserNameRequest, opts ...grpc.CallOption) (*UpdateUserNameReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateUserNameReply)
+	err := c.cc.Invoke(ctx, GatewayService_UpdateUserName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GatewayServiceServer is the server API for GatewayService service.
 // All implementations must embed UnimplementedGatewayServiceServer
 // for forward compatibility.
@@ -138,6 +151,8 @@ type GatewayServiceServer interface {
 	ListGameAppsWithPage(context.Context, *ListGameAppsRequest) (*ListGameAppsReply, error)
 	// 用户和游戏统计接口
 	GetUserGameAppStats(context.Context, *GetUserGameAppStatsRequest) (*GetUserGameAppStatsReply, error)
+	// 修改用户名称
+	UpdateUserName(context.Context, *UpdateUserNameRequest) (*UpdateUserNameReply, error)
 	mustEmbedUnimplementedGatewayServiceServer()
 }
 
@@ -165,6 +180,9 @@ func (UnimplementedGatewayServiceServer) ListGameAppsWithPage(context.Context, *
 }
 func (UnimplementedGatewayServiceServer) GetUserGameAppStats(context.Context, *GetUserGameAppStatsRequest) (*GetUserGameAppStatsReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserGameAppStats not implemented")
+}
+func (UnimplementedGatewayServiceServer) UpdateUserName(context.Context, *UpdateUserNameRequest) (*UpdateUserNameReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserName not implemented")
 }
 func (UnimplementedGatewayServiceServer) mustEmbedUnimplementedGatewayServiceServer() {}
 func (UnimplementedGatewayServiceServer) testEmbeddedByValue()                        {}
@@ -295,6 +313,24 @@ func _GatewayService_GetUserGameAppStats_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GatewayService_UpdateUserName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GatewayServiceServer).UpdateUserName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GatewayService_UpdateUserName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GatewayServiceServer).UpdateUserName(ctx, req.(*UpdateUserNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GatewayService_ServiceDesc is the grpc.ServiceDesc for GatewayService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -325,6 +361,10 @@ var GatewayService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserGameAppStats",
 			Handler:    _GatewayService_GetUserGameAppStats_Handler,
+		},
+		{
+			MethodName: "UpdateUserName",
+			Handler:    _GatewayService_UpdateUserName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
